@@ -1,0 +1,118 @@
+/**
+ * PrecipitationTooltip Component
+ * 
+ * A simple tooltip component for precipitation data that uses relative positioning.
+ * This component positions tooltips directly below precipitation bars using simple CSS.
+ * 
+ * Features:
+ * - Simple relative positioning (no complex calculations)
+ * - Positions tooltip directly below the hovered element
+ * - Uses standard CSS positioning that works reliably
+ * - Lightweight and performant
+ */
+
+// Simulate React hooks
+const { useState, useCallback, useRef } = React;
+
+/**
+ * PrecipitationTooltip Component
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - The element that triggers the tooltip
+ * @param {Object} props.data - Precipitation data for the tooltip
+ * @param {string} props.data.time - Time string (e.g., "11:00 AM")
+ * @param {number} props.data.precipitation - Precipitation amount
+ * @param {string} props.data.unit - Precipitation unit (e.g., "mm", "inches")
+ * @param {number} props.data.probability - Precipitation probability (optional)
+ * @param {string} props.data.condition - Weather condition (e.g., "Moderate Rain")
+ * @param {string} props.className - Additional CSS classes
+ * @returns {JSX.Element} - Rendered tooltip component
+ */
+const PrecipitationTooltip = ({ 
+  children, 
+  data, 
+  className = '',
+  disabled = false 
+}) => {
+  // Local state for tooltip visibility
+  const [isVisible, setIsVisible] = useState(false);
+  
+  // Handle mouse enter - show tooltip
+  const handleMouseEnter = useCallback(() => {
+    if (disabled || !data) return;
+    setIsVisible(true);
+  }, [disabled, data]);
+  
+  // Handle mouse leave - hide tooltip
+  const handleMouseLeave = useCallback(() => {
+    setIsVisible(false);
+  }, []);
+  
+  // Format precipitation amount for display
+  const formatPrecipitation = useCallback((amount, unit) => {
+    if (amount === null || amount === undefined || amount === 0) {
+      return 'No precipitation';
+    }
+    
+    // Format to 1 decimal place, but remove trailing zeros
+    const formatted = parseFloat(amount.toFixed(1));
+    return `${formatted} ${unit}`;
+  }, []);
+  
+  // Format probability for display
+  const formatProbability = useCallback((probability) => {
+    if (probability === null || probability === undefined) {
+      return null;
+    }
+    
+    return `${Math.round(probability)}% chance`;
+  }, []);
+  
+  // Generate tooltip content
+  const tooltipContent = data ? (
+    <div className="precipitation-tooltip-content">
+      <div className="tooltip-time">{data.time}</div>
+      <div className="tooltip-precipitation">
+        {formatPrecipitation(data.precipitation, data.unit)}
+      </div>
+      {data.probability !== null && data.probability !== undefined && (
+        <div className="tooltip-probability">
+          {formatProbability(data.probability)}
+        </div>
+      )}
+      {data.condition && (
+        <div className="tooltip-condition">{data.condition}</div>
+      )}
+    </div>
+  ) : null;
+  
+  // Don't render if no data or disabled
+  if (!data || disabled) {
+    return children;
+  }
+  
+  return (
+    <div className={`precipitation-tooltip-container ${className}`}>
+      {/* Trigger element with event handlers */}
+      <div
+        className="precipitation-tooltip-trigger"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {children}
+      </div>
+      
+      {/* Tooltip - positioned with simple CSS relative to parent */}
+      {isVisible && tooltipContent && (
+        <div className={`precipitation-tooltip ${isVisible ? 'visible' : ''}`}>
+          {tooltipContent}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Set display name for debugging
+PrecipitationTooltip.displayName = 'PrecipitationTooltip';
+
+// Export the component
+window.PrecipitationTooltip = PrecipitationTooltip;

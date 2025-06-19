@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto Generate Super Sky Icons</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #3498db;
+    }
+    .icon-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20px 0;
+    }
+    .instructions {
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .sizes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .size-item {
+      text-align: center;
+    }
+    #status {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+  <h1>Super Sky Icon Generator</h1>
+  
+  <div class="instructions">
+    <h2>Instructions</h2>
+    <p>This page automatically generates and saves the app icons needed for the PWA.</p>
+    <ol>
+      <li>Click the "Generate & Save Icons" button below</li>
+      <li>The icons will be automatically saved to the /icons directory</li>
+      <li>Check the status message below for confirmation</li>
+    </ol>
+  </div>
+  
+  <div class="icon-container">
+    <svg id="app-icon" width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+      <!-- Background -->
+      <rect width="512" height="512" fill="#3498db" rx="64" ry="64"/>
+      
+      <!-- Weather icons -->
+      <!-- Sun -->
+      <circle cx="150" cy="150" r="60" fill="#f1c40f"/>
+      <g fill="#f1c40f">
+        <rect x="145" y="50" width="10" height="40" rx="5" ry="5"/>
+        <rect x="145" y="210" width="10" height="40" rx="5" ry="5"/>
+        <rect x="50" y="145" width="40" height="10" rx="5" ry="5"/>
+        <rect x="210" y="145" width="40" height="10" rx="5" ry="5"/>
+        <rect x="80" y="80" width="10" height="10" rx="5" ry="5" transform="rotate(45 85 85)"/>
+        <rect x="210" y="210" width="10" height="10" rx="5" ry="5" transform="rotate(45 215 215)"/>
+        <rect x="80" y="210" width="10" height="10" rx="5" ry="5" transform="rotate(-45 85 215)"/>
+        <rect x="210" y="80" width="10" height="10" rx="5" ry="5" transform="rotate(-45 215 85)"/>
+      </g>
+      
+      <!-- Cloud -->
+      <path d="M370 180 C 330 180, 300 220, 310 260 C 260 260, 220 310, 240 360 C 260 400, 340 400, 360 360 C 390 380, 430 360, 440 330 C 460 290, 430 250, 390 250 C 390 220, 380 180, 370 180 Z" fill="white"/>
+      
+      <!-- Rain drops -->
+      <g fill="#2980b9">
+        <path d="M280 380 C 280 400, 300 400, 300 380 C 300 360, 290 350, 290 350 C 290 350, 280 360, 280 380 Z"/>
+        <path d="M320 400 C 320 420, 340 420, 340 400 C 340 380, 330 370, 330 370 C 330 370, 320 380, 320 400 Z"/>
+        <path d="M360 380 C 360 400, 380 400, 380 380 C 380 360, 370 350, 370 350 C 370 350, 360 360, 360 380 Z"/>
+      </g>
+      
+      <!-- Triple Check text -->
+      <text x="256" y="460" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="white">TRIPLE CHECK</text>
+    </svg>
+    
+    <button id="generate-btn">Generate & Save Icons</button>
+  </div>
+  
+  <div id="status"></div>
+  <div id="sizes-container" class="sizes"></div>
+  
+  <script>
+    document.getElementById('generate-btn').addEventListener('click', function() {
+      const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+      const sizesContainer = document.getElementById('sizes-container');
+      const statusDiv = document.getElementById('status');
+      sizesContainer.innerHTML = '';
+      statusDiv.innerHTML = 'Generating icons...';
+      statusDiv.className = '';
+      
+      // Create a copy of the SVG for saving
+      const svgData = new XMLSerializer().serializeToString(document.getElementById('app-icon'));
+      
+      // Save the SVG file
+      const svgBlob = new Blob([svgData], {type: 'image/svg+xml'});
+      const svgUrl = URL.createObjectURL(svgBlob);
+      const svgLink = document.createElement('a');
+      svgLink.href = svgUrl;
+      svgLink.download = 'icon.svg';
+      document.body.appendChild(svgLink);
+      svgLink.click();
+      document.body.removeChild(svgLink);
+      
+      let generatedCount = 0;
+      
+      sizes.forEach(size => {
+        const container = document.createElement('div');
+        container.className = 'size-item';
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        
+        // Draw the SVG to the canvas
+        const img = new Image();
+        img.onload = function() {
+          ctx.drawImage(img, 0, 0, size, size);
+          
+          // Convert to data URL
+          const dataUrl = canvas.toDataURL('image/png');
+          
+          // Create image element for display
+          const imgElement = document.createElement('img');
+          imgElement.src = dataUrl;
+          imgElement.width = size;
+          imgElement.height = size;
+          imgElement.style.display = 'block';
+          imgElement.style.margin = '10px auto';
+          
+          // Create label
+          const label = document.createElement('p');
+          label.textContent = `${size}x${size}`;
+          
+          // Add to container
+          container.appendChild(imgElement);
+          container.appendChild(label);
+          sizesContainer.appendChild(container);
+          
+          // Create download link
+          const link = document.createElement('a');
+          link.href = dataUrl;
+          link.download = `icon-${size}x${size}.png`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          
+          generatedCount++;
+          if (generatedCount === sizes.length) {
+            statusDiv.innerHTML = 'All icons generated and downloaded successfully! Please move the downloaded files to the /icons directory.';
+            statusDiv.className = 'success';
+          }
+        };
+        img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+      });
+    });
+  </script>
+</body>
+</html>

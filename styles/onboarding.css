@@ -1,0 +1,208 @@
+/**
+ * Super Sky App - Onboarding Styles
+ * 
+ * This file contains styles for the user onboarding experience:
+ * - Welcome modal
+ * - Feature tour tooltips
+ * - Help button
+ */
+
+/* Modal Backdrop */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-index-modal-backdrop);
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: var(--bg-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-xl);
+  padding: var(--spacing-6);
+  max-width: 500px;
+  width: 90%;
+  z-index: var(--z-index-modal);
+}
+
+/* Welcome Modal */
+.welcome-modal {
+  text-align: center;
+}
+
+.welcome-modal h2 {
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-4);
+}
+
+.welcome-modal p {
+  margin-bottom: var(--spacing-4);
+  color: var(--text-secondary);
+  line-height: var(--line-height-loose);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-6);
+}
+
+/* Tour Tooltip */
+.tour-tooltip {
+  position: fixed;
+  z-index: var(--z-index-tooltip);
+  max-width: 300px;
+  background-color: var(--bg-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  border-left: 4px solid var(--color-primary);
+  animation: fadeIn var(--transition-normal) var(--transition-timing);
+}
+
+.tour-tooltip-content {
+  padding: var(--spacing-4);
+}
+
+.tour-tooltip h3 {
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-2);
+  font-size: var(--font-size-lg);
+}
+
+.tour-tooltip p {
+  margin-bottom: var(--spacing-4);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-loose);
+}
+
+.tour-tooltip-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-4);
+}
+
+.tour-navigation {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.tour-progress {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: var(--spacing-3);
+}
+
+/* Tooltip Placement */
+.tour-tooltip[data-placement="top"] {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+.tour-tooltip[data-placement="bottom"] {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+}
+
+.tour-tooltip[data-placement="left"] {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-10px);
+}
+
+.tour-tooltip[data-placement="right"] {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+}
+
+/* Help Button */
+.help-button {
+  position: fixed;
+  bottom: var(--spacing-4);
+  right: var(--spacing-4);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: var(--shadow-md);
+  border: none;
+  cursor: pointer;
+  transition: transform var(--transition-normal) var(--transition-timing),
+              background-color var(--transition-normal) var(--transition-timing);
+  z-index: var(--z-index-fixed);
+}
+
+.help-button:hover {
+  transform: scale(1.1);
+  background-color: var(--color-primary-dark);
+}
+
+/* Small Button Variant */
+.btn-sm {
+  padding: var(--spacing-1) var(--spacing-3);
+  font-size: var(--font-size-sm);
+}
+
+/* Highlighted Elements */
+.tour-highlight {
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 0 4px var(--color-primary-light);
+  border-radius: var(--border-radius);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+  .modal-content {
+    width: 95%;
+    padding: var(--spacing-4);
+  }
+  
+  .tour-tooltip {
+    max-width: 250px;
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+  
+  .help-button {
+    width: 40px;
+    height: 40px;
+    font-size: var(--font-size-lg);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .tour-tooltip,
+  .welcome-modal,
+  .help-button {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .help-button:hover {
+    transform: none !important;
+  }
+}

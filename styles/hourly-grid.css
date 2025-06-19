@@ -1,0 +1,847 @@
+/**
+ * Hourly Comparison Grid Styles - Fixed Version
+ */
+
+.hourly-comparison-grid {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.hourly-comparison-grid h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+/* Day selector styles */
+.day-selector {
+  display: flex;
+  overflow-x: visible;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.day-button {
+  flex: 0 0 auto;
+  padding: 10px 15px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  outline: none;
+}
+
+.day-button:hover {
+  /* NO effects */
+}
+
+.day-button.active {
+  background-color: #007bff;
+  color: #000;
+  border: none;
+}
+
+.day-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.day-date {
+  font-size: 0.8rem;
+  color: inherit;
+}
+
+.day-button.active .day-name,
+.day-button.active .day-date {
+  color: #000 !important;
+}
+
+/* Day header styles */
+.day-header {
+  margin-bottom: 15px;
+  background-color: #f5f5f5;
+  padding: 12px 16px;
+  border-radius: 6px;
+}
+
+.day-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.day-date-section {
+  flex: 0 0 auto;
+  text-align: left;
+}
+
+.day-weather-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+}
+
+.weather-icon {
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.weather-description {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+.day-temp-section {
+  flex: 0 0 auto;
+  text-align: right;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Day stats styles */
+.day-stats {
+  display: flex;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.stat {
+  margin-right: 20px;
+}
+
+.stat-label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.stat-value {
+  color: #333;
+}
+
+/* Hourly grid styles */
+.hourly-grid {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  border-collapse: collapse;
+  display: table;
+  margin-bottom: 20px;
+  table-layout: fixed;
+  overflow: hidden;
+}
+
+.hourly-grid-container {
+  overflow-x: hidden;
+  overflow-y: visible;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hourly-row {
+  border: none;
+}
+
+/* ENHANCED: Grey line under time headers - made more prominent */
+.hourly-row.header-row {
+  background-color: transparent;
+  border-bottom: 2px solid #ccc !important;
+}
+
+.hourly-row.precipitation-row {
+  height: 30px;
+  border: none;
+}
+
+.precipitation-row .source-cell {
+  background-color: transparent;
+}
+
+.hourly-cell {
+  padding: 4px 1px;
+  text-align: center;
+  min-width: 28px;
+  width: 28px;
+  font-size: 0.75rem;
+}
+
+.time-cell {
+  max-width: 28px;
+}
+
+.hourly-cell.bar-chart-cell {
+  min-height: 30px;
+  height: 30px;
+  padding: 2px 0;
+  vertical-align: middle;
+  min-width: auto !important;
+  max-width: none !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  table-layout: fixed !important;
+}
+
+.precipitation-row td[colspan="24"] {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: none !important;
+  padding: 2px 0 !important;
+  position: relative;
+  display: table-cell !important;
+  table-layout: fixed !important;
+  overflow: visible !important;
+}
+
+.precipitation-row .precipitation-bar-chart {
+  width: 100% !important;
+  position: relative !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+}
+
+.precipitation-row .precipitation-hour-segment {
+  flex: 1 1 auto !important;
+  min-width: calc(100% / 24) !important;
+  width: calc(100% / 24) !important;
+  box-sizing: border-box !important;
+}
+
+.precipitation-row {
+  display: table-row !important;
+}
+
+.hourly-table tbody {
+  display: table-row-group !important;
+}
+
+.hourly-table tr {
+  display: table-row !important;
+}
+
+.hourly-cell[colspan] {
+  width: auto !important;
+  max-width: none !important;
+  min-width: auto !important;
+}
+
+.precipitation-row .hour-data {
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+.precipitation-row .hour-precip {
+  width: 100% !important;
+}
+
+.source-cell {
+  position: sticky;
+  left: 0;
+  background-color: #fff;
+  z-index: 1;
+  text-align: left;
+  min-width: 120px;
+  width: 120px;
+  max-width: 120px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  padding-left: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-row .source-cell {
+  background-color: transparent;
+}
+
+.time-cell {
+  font-size: 0.65rem;
+  color: #666;
+  line-height: 1.1;
+  padding: 2px 1px;
+  border-right: 1px solid #e0e0e0;
+  position: relative;
+}
+
+.time-cell::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 1px;
+  height: 8px;
+  background-color: #ddd;
+  z-index: 2;
+}
+
+.time-cell:last-child {
+  border-right: none;
+}
+
+.time-cell:last-child::after {
+  display: none;
+}
+
+.hour-precip {
+  width: 100%;
+  height: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.precipitation-bar-chart {
+  width: 100% !important;
+  display: flex !important;
+  height: 20px;
+  position: relative;
+}
+
+.hour-precip-text {
+  font-size: 0.7rem;
+  color: #333;
+}
+
+.no-data {
+  color: #ccc;
+}
+
+.no-data-available {
+  background-color: transparent;
+}
+
+.no-data-message {
+  padding: 10px;
+  color: #666;
+  font-style: italic;
+}
+
+.error-message {
+  color: #dc3545;
+}
+
+/* Service indicator styles */
+.service-cell-content {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.service-indicator {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  margin-right: 6px;
+  flex-shrink: 0;
+  font-size: 0.7rem;
+}
+
+.service-indicator-accuweather {
+  background-color: #e74c3c;
+}
+
+.service-indicator-openmeteo {
+  background-color: #3498db;
+}
+
+.service-indicator-foreca {
+  background-color: #2ecc71;
+}
+
+.service-indicator-google {
+  background-color: #4285F4;
+}
+
+.service-name-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 110px;
+  color: #333 !important;
+  display: inline-block !important;
+  font-weight: 500;
+}
+
+/* Bar Chart Cell Styles */
+.bar-chart-cell {
+  padding: 4px 8px !important;
+  position: relative;
+  height: 28px;
+  width: 100% !important;
+  display: table-cell !important;
+}
+
+.bar-chart-cell {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.bar-chart-cell .hour-precip {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.precipitation-row .bar-chart-cell {
+  width: 100% !important;
+  max-width: none !important;
+  overflow: visible !important;
+  table-layout: fixed !important;
+}
+
+.precipitation-row td.bar-chart-cell[colspan="24"] {
+  width: 100% !important;
+  display: table-cell !important;
+  position: relative;
+  overflow: visible;
+  table-layout: fixed !important;
+}
+
+.precipitation-bar-chart {
+  width: 100% !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  min-width: 100% !important;
+}
+
+.precipitation-bar-container {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Precipitation visualization styles */
+.precip-visualization {
+  padding: 2px 3px;
+  border-radius: 2px;
+  font-size: 0.65rem;
+  display: inline-block;
+  line-height: 1.2;
+  min-height: 16px;
+  width: 100%;
+}
+
+.precip-blank-cell {
+  padding: 2px 3px;
+  border-radius: 2px;
+  display: inline-block;
+  line-height: 1.2;
+  min-height: 16px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.precip-drizzle {
+  background-color: #d0d0d0;
+}
+
+.precip-light-rain {
+  background-color: #5fb8e0;
+}
+
+.precip-moderate-rain {
+  background-color: #3a6ea8;
+  color: white;
+}
+
+.precip-heavy-rain {
+  background-color: #6a006a;
+  color: white;
+}
+
+.precip-extreme-rain {
+  background-color: rgba(75, 0, 130, 0.8);
+  color: white;
+}
+
+.weather-sunny {
+  background-color: rgba(255, 215, 0, 0.3);
+}
+
+.weather-cloudy {
+  background-color: rgba(169, 169, 169, 0.3);
+}
+
+.has-thunderstorm {
+  border: none;
+}
+
+.raindrop-icon {
+  width: 8px;
+  height: 12px;
+  background-color: #3498db;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  margin: 0 auto;
+}
+
+/* Legend styles */
+.hourly-legend {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: white !important;
+  border-radius: 4px;
+  border: none;
+}
+
+.hourly-legend h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: black !important;
+}
+
+.legend-items {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  margin-bottom: 5px;
+  color: black !important;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  border-radius: 3px;
+}
+
+/* Tooltip styles */
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.tooltip-top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-5px);
+  margin-bottom: 5px;
+}
+
+.tooltip-bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  margin-top: 5px;
+}
+
+.loading .hourly-cell {
+  background-color: #f0f0f0;
+}
+
+/* Limited data message styles */
+.limited-data-notice {
+  background-color: #fff3cd;
+}
+
+.limited-data-message {
+  padding: 10px;
+  color: #856404;
+  text-align: center;
+}
+
+.limited-data-message strong {
+  font-weight: bold;
+}
+
+.limited-data-message small {
+  display: block;
+  margin-top: 5px;
+  color: #6c757d;
+}
+
+/* Multi-Day Vertical Layout Styles */
+.multi-day-layout {
+  /* Remove the single-day constraints and allow vertical scrolling */
+}
+
+.multi-day-layout h2 {
+  margin-bottom: 30px;
+  font-size: 1.6rem;
+  color: #333;
+  text-align: center;
+}
+
+/* Container for all day sections */
+.days-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ENHANCED: Individual day section with prominent drop shadows */
+.day-section {
+  border: 1px solid #d0d0d0;
+  border-radius: 16px;
+  padding: 28px;
+  background-color: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 36px;
+  position: relative;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effects removed for cleaner appearance */
+
+/* Day header with temperature and date */
+.day-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.day-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  padding: 10px 0;
+}
+
+/* Remove day selector styles since we no longer use them */
+.day-selector {
+  display: none !important;
+}
+
+.day-button {
+  display: none !important;
+}
+
+/* Remove day stats styles since they're now in the day header */
+.day-stats {
+  display: none !important;
+}
+
+/* Adjust hourly grid container for multi-day layout */
+.day-section .hourly-grid-container {
+  overflow-x: hidden;
+  overflow-y: visible;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 0;
+}
+
+/* Adjust hourly grid for day sections */
+.day-section .hourly-grid {
+  margin-bottom: 0;
+}
+
+/* Ensure proper spacing in multi-day layout */
+.multi-day-layout .hourly-legend {
+  margin-top: 40px;
+  position: sticky;
+  bottom: 20px;
+  z-index: 10;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Current day highlighting removed for uniform appearance */
+
+/* Add subtle animation for day sections loading */
+.day-section {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Loading state for day sections */
+.day-section.loading {
+  opacity: 0.7;
+  transform: translateY(10px);
+}
+
+/* Smooth scrolling for the entire multi-day layout */
+.multi-day-layout {
+  scroll-behavior: smooth;
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 768px) {
+  .hourly-comparison-grid {
+    padding: 15px;
+  }
+  
+  .legend-items {
+    flex-direction: column;
+  }
+  
+  .legend-item {
+    margin-bottom: 8px;
+  }
+  
+  .source-cell {
+    min-width: 80px;
+    width: 80px;
+    max-width: 80px;
+    font-size: 0.7rem;
+  }
+  
+  .hourly-cell {
+    min-width: 20px;
+    width: 20px;
+    font-size: 0.65rem;
+    padding: 2px 0;
+  }
+  
+  .time-cell {
+    max-width: 20px;
+    font-size: 0.6rem;
+  }
+  
+  .service-name-text {
+    max-width: 60px;
+    font-size: 0.65rem;
+  }
+  
+  .days-container {
+    gap: 30px;
+  }
+  
+  .day-section {
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  
+  .day-title {
+    font-size: 1.1rem;
+  }
+  
+  .day-weather-section {
+    padding: 0 12px;
+    gap: 6px;
+  }
+  
+  .weather-icon {
+    font-size: 1.1rem;
+  }
+  
+  .weather-description {
+    font-size: 0.8rem;
+  }
+  
+  .multi-day-layout h2 {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+  }
+  
+  .multi-day-layout .hourly-legend {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 576px) {
+  .source-cell {
+    min-width: 60px;
+    width: 60px;
+    max-width: 60px;
+    font-size: 0.65rem;
+    padding-left: 4px;
+  }
+  
+  .hourly-cell {
+    min-width: 18px;
+    width: 18px;
+    font-size: 0.6rem;
+    padding: 1px 0;
+  }
+  
+  .time-cell {
+    max-width: 18px;
+    font-size: 0.55rem;
+  }
+  
+  .service-name-text {
+    max-width: 50px;
+    font-size: 0.6rem;
+  }
+  
+  .service-indicator {
+    width: 16px;
+    height: 16px;
+    font-size: 0.6rem;
+  }
+  
+  .days-container {
+    gap: 25px;
+  }
+  
+  .day-section {
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .day-title {
+    font-size: 1rem;
+  }
+  
+  .day-weather-section {
+    padding: 0 8px;
+    gap: 4px;
+    flex-direction: column;
+  }
+  
+  .weather-icon {
+    font-size: 1rem;
+  }
+  
+  .weather-description {
+    font-size: 0.75rem;
+  }
+  
+  .multi-day-layout h2 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+}

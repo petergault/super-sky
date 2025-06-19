@@ -1,0 +1,326 @@
+/**
+ * Animation System - DISABLED
+ * 
+ * ALL animations and transitions have been removed per user requirements.
+ * NO animations, NO transitions, NO hover effects.
+ */
+
+/* NO animations - all animation classes disabled */
+
+.fade-in-enter {
+  opacity: 1;
+  transform: translateY(0);
+  /* NO transitions - removed all animations */
+}
+
+.fade-in-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  /* NO transitions - removed all animations */
+}
+
+.fade-in-exit {
+  opacity: 1;
+  transform: translateY(0);
+  /* NO transitions - removed all animations */
+}
+
+.fade-in-exit-active {
+  opacity: 1;
+  transform: translateY(0);
+  /* NO transitions - removed all animations */
+}
+
+.card {
+  /* NO transitions - removed all animations */
+}
+
+.card:hover {
+  /* NO hover effects - removed all animations */
+}
+
+.btn {
+  /* NO transitions - removed all animations */
+}
+
+.btn:hover {
+  /* NO hover effects - removed all animations */
+}
+
+.btn:active {
+  /* NO active effects - removed all animations */
+}
+
+.display-mode-select {
+  /* NO transitions - removed all animations */
+}
+
+.tab-button {
+  /* NO transitions - removed all animations */
+}
+
+.comparison-content {
+  /* NO animations - removed all animations */
+}
+
+.comparison-row {
+  /* NO animations - removed all animations */
+}
+
+.comparison-row:nth-child(1) { /* NO animation delays */ }
+.comparison-row:nth-child(2) { /* NO animation delays */ }
+.comparison-row:nth-child(3) { /* NO animation delays */ }
+.comparison-row:nth-child(4) { /* NO animation delays */ }
+.comparison-row:nth-child(5) { /* NO animation delays */ }
+
+.weather-info {
+  /* NO animations - removed all animations */
+}
+
+.current-weather {
+  /* NO animations - removed all animations */
+}
+
+.display-mode-indicator {
+  /* NO animations - removed all animations */
+}
+
+.mode-rain, .mode-dry {
+  /* NO animations - removed all animations */
+}
+
+.simplified-view {
+  /* NO animations - removed all animations */
+}
+
+/* NO keyframes - removed all animations */
+
+.weather-condition {
+  /* NO transitions - removed all animations */
+}
+
+.weather-condition:hover {
+  /* NO hover effects - removed all animations */
+}
+
+.weather-condition:active {
+  /* NO active effects - removed all animations */
+}
+
+.weather-condition:focus {
+  /* NO focus effects - removed all animations */
+}
+
+.weather-condition.weather-sunny:hover {
+  /* NO hover effects - removed all animations */
+}
+
+.weather-condition.weather-cloudy:hover {
+  /* NO hover effects - removed all animations */
+}
+
+.weather-condition.weather-sunny:active {
+  /* NO active effects - removed all animations */
+}
+
+.weather-condition.weather-cloudy:active {
+  /* NO active effects - removed all animations */
+}
+
+.weather-condition.weather-sunny:focus {
+  /* NO focus effects - removed all animations */
+}
+
+.weather-condition.weather-cloudy:focus {
+  /* NO focus effects - removed all animations */
+}
+
+.weather-condition.has-thunderstorm:hover {
+  /* NO hover effects - removed all animations */
+}
+
+.weather-condition.has-thunderstorm:active {
+  /* NO active effects - removed all animations */
+}
+
+.weather-condition.has-thunderstorm:focus {
+  /* NO focus effects - removed all animations */
+}
+
+.precip-visualization:hover {
+  /* NO hover effects - removed all animations */
+}
+
+.precip-visualization:active {
+  /* NO active effects - removed all animations */
+}
+
+.precip-visualization:focus {
+  /* NO focus effects - removed all animations */
+}
+
+.precip-trace:hover {
+  /* NO hover effects - removed all animations */
+}
+
+.precip-drizzle:hover {
+  /* NO hover effects - removed all animations */
+}
+
+.precip-light-rain:hover {
+  /* NO hover effects - removed all animations */
+}
+
+.precip-moderate-rain:hover {
+  /* NO hover effects - removed all animations */
+}
+
+.precip-heavy-rain:hover {
+  /* NO hover effects - removed all animations */
+}
+
+.precip-trace:active {
+  /* NO active effects - removed all animations */
+}
+
+.precip-drizzle:active {
+  /* NO active effects - removed all animations */
+}
+
+.precip-light-rain:active {
+  /* NO active effects - removed all animations */
+}
+
+.precip-moderate-rain:active {
+  /* NO active effects - removed all animations */
+}
+
+.precip-heavy-rain:active {
+  /* NO active effects - removed all animations */
+}
+
+.precip-trace:focus {
+  /* NO focus effects - removed all animations */
+}
+
+.precip-drizzle:focus {
+  /* NO focus effects - removed all animations */
+}
+
+.precip-light-rain:focus {
+  /* NO focus effects - removed all animations */
+}
+
+.precip-moderate-rain:focus {
+  /* NO focus effects - removed all animations */
+}
+
+.precip-heavy-rain:focus {
+  /* NO focus effects - removed all animations */
+}
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: var(--color-success);
+  color: var(--color-white);
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-index-toast);
+  /* NO animations - removed all animations */
+}
+
+.toast.error {
+  background-color: var(--color-error);
+}
+
+.toast.warning {
+  background-color: var(--color-warning);
+  color: var(--color-black);
+}
+
+.toast.info {
+  background-color: var(--color-info);
+}
+
+/* NO keyframes - removed all animations */
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-index-modal);
+  opacity: 1;
+  /* NO transitions - removed all animations */
+}
+
+.loading-overlay.show {
+  opacity: 1;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid var(--color-white);
+  border-radius: 50%;
+  /* NO animations - removed all animations */
+}
+
+.highlight-pulse {
+  /* NO animations - removed all animations */
+}
+
+/* NO keyframes - removed all animations */
+
+.tour-highlight {
+  position: relative;
+  z-index: 1;
+  /* NO animations - removed all animations */
+}
+
+/* NO keyframes - removed all animations */
+
+/* Reduced motion support - force disable all animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .page-transition-enter,
+  .page-transition-enter-active,
+  .page-transition-exit,
+  .page-transition-exit-active {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  
+  .fade-in-enter,
+  .fade-in-enter-active,
+  .fade-in-exit,
+  .fade-in-exit-active {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  
+  .weather-condition:hover {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

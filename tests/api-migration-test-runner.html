@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Sky App - API Migration Tests</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/design-system.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border-left: 5px solid #3498db;
+        }
+        
+        h1 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .test-controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+        }
+        
+        .test-section h2 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .test-description {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .test-results-container {
+            margin-top: 30px;
+        }
+        
+        .browser-info {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        
+        .compatibility-section {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .compatibility-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .compatibility-item {
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            border-left: 3px solid #3498db;
+        }
+        
+        .test-log {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Super Sky App - API Migration Tests</h1>
+        <p>This page runs tests to verify the successful migration from front-end API key management to back-end API endpoints.</p>
+    </header>
+    
+    <div class="test-controls">
+        <h2>Test Controls</h2>
+        <button id="run-all-tests" class="btn-primary">Run All Tests</button>
+        <button id="clear-results" class="btn-secondary">Clear Results</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test Overview</h2>
+        <div class="test-description">
+            <h3>Migration Testing Scope</h3>
+            <p>These tests verify that the migration from front-end API key management to back-end API endpoints has been successfully implemented. The tests cover:</p>
+            <ul>
+                <li><strong>Functional Testing:</strong> Verifying that weather data is correctly fetched and displayed</li>
+                <li><strong>Error Handling:</strong> Testing with invalid inputs and simulated server errors</li>
+                <li><strong>UI Testing:</strong> Verifying that API key management UI components are removed</li>
+                <li><strong>Performance Testing:</strong> Comparing load times with and without caching</li>
+                <li><strong>Compatibility Testing:</strong> Browser and device compatibility</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="test-results-container" id="test-results-container">
+        <!-- Test results will be inserted here by the test script -->
+    </div>
+    
+    <div class="compatibility-section">
+        <h2>Compatibility Testing</h2>
+        <p>The application has been tested on the following browsers and devices:</p>
+        
+        <div class="compatibility-grid">
+            <div class="compatibility-item">
+                <h4>Chrome</h4>
+                <p>Version: <span id="chrome-version">Detecting...</span></p>
+                <p>Status: <span id="chrome-status">Not tested</span></p>
+            </div>
+            
+            <div class="compatibility-item">
+                <h4>Firefox</h4>
+                <p>Version: <span id="firefox-version">Detecting...</span></p>
+                <p>Status: <span id="firefox-status">Not tested</span></p>
+            </div>
+            
+            <div class="compatibility-item">
+                <h4>Safari</h4>
+                <p>Version: <span id="safari-version">Detecting...</span></p>
+                <p>Status: <span id="safari-status">Not tested</span></p>
+            </div>
+            
+            <div class="compatibility-item">
+                <h4>Edge</h4>
+                <p>Version: <span id="edge-version">Detecting...</span></p>
+                <p>Status: <span id="edge-status">Not tested</span></p>
+            </div>
+            
+            <div class="compatibility-item">
+                <h4>Mobile</h4>
+                <p>Device: <span id="mobile-device">Detecting...</span></p>
+                <p>Status: <span id="mobile-status">Not tested</span></p>
+            </div>
+            
+            <div class="compatibility-item">
+                <h4>Tablet</h4>
+                <p>Device: <span id="tablet-device">Detecting...</span></p>
+                <p>Status: <span id="tablet-status">Not tested</span></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="browser-info">
+        <h3>Current Browser Information</h3>
+        <p>User Agent: <span id="user-agent">Detecting...</span></p>
+        <p>Screen Size: <span id="screen-size">Detecting...</span></p>
+        <p>Window Size: <span id="window-size">Detecting...</span></p>
+    </div>
+    
+    <div class="test-log" id="test-log">
+        <!-- Test logs will be inserted here -->
+    </div>
+    
+    <!-- Load React libraries -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    
+    <!-- Load required scripts -->
+    <script src="../config/config.js"></script>
+    <script src="../utils/helpers.js"></script>
+    <script src="../utils/cacheManager.js"></script>
+    <script src="../utils/transformers.js"></script>
+    
+    <!-- Load test utilities first -->
+    <script src="../tests/mock-api-handler.js"></script>
+    <script src="../tests/server-error-simulator.js"></script>
+    <script src="../tests/mock-components.js"></script>
+    
+    <!-- Load application scripts -->
+    <script src="../services/weatherService.js"></script>
+    <script src="../hooks/useWeather.js"></script>
+    
+    <!-- Load test scripts -->
+    <script src="../tests/api-migration-tests.js"></script>
+    
+    <script>
+        // Initialize browser detection
+        document.addEventListener('DOMContentLoaded', function() {
+            // Detect browser
+            const userAgent = navigator.userAgent;
+            document.getElementById('user-agent').textContent = userAgent;
+            
+            // Detect screen size
+            document.getElementById('screen-size').textContent = `${screen.width}x${screen.height}`;
+            
+            // Detect window size
+            document.getElementById('window-size').textContent = `${window.innerWidth}x${window.innerHeight}`;
+            
+            // Detect browser versions
+            if (userAgent.indexOf('Chrome') > -1) {
+                document.getElementById('chrome-version').textContent = userAgent.match(/Chrome\/(\d+\.\d+)/)[1];
+                document.getElementById('chrome-status').textContent = 'Current browser';
+            }
+            
+            if (userAgent.indexOf('Firefox') > -1) {
+                document.getElementById('firefox-version').textContent = userAgent.match(/Firefox\/(\d+\.\d+)/)[1];
+                document.getElementById('firefox-status').textContent = 'Current browser';
+            }
+            
+            if (userAgent.indexOf('Safari') > -1 && userAgent.indexOf('Chrome') === -1) {
+                document.getElementById('safari-version').textContent = userAgent.match(/Safari\/(\d+\.\d+)/)[1];
+                document.getElementById('safari-status').textContent = 'Current browser';
+            }
+            
+            if (userAgent.indexOf('Edg') > -1) {
+                document.getElementById('edge-version').textContent = userAgent.match(/Edg\/(\d+\.\d+)/)[1];
+                document.getElementById('edge-status').textContent = 'Current browser';
+            }
+            
+            // Detect mobile/tablet
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
+            const isTablet = /iPad|Android(?!.*Mobile)/i.test(userAgent);
+            
+            if (isMobile && !isTablet) {
+                document.getElementById('mobile-device').textContent = userAgent.match(/(iPhone|Android|iPod)/i)[0];
+                document.getElementById('mobile-status').textContent = 'Current device';
+            } else if (isTablet) {
+                document.getElementById('tablet-device').textContent = userAgent.match(/(iPad|Android)/i)[0];
+                document.getElementById('tablet-status').textContent = 'Current device';
+            } else {
+                document.getElementById('mobile-device').textContent = 'Not mobile';
+                document.getElementById('tablet-device').textContent = 'Not tablet';
+            }
+            
+            // Set up event listeners
+            document.getElementById('run-all-tests').addEventListener('click', runAllTests);
+            document.getElementById('clear-results').addEventListener('click', clearResults);
+        });
+        
+        // Run all tests
+        async function runAllTests() {
+            // Clear previous results
+            clearResults();
+            
+            // Log start
+            logMessage('Starting API migration tests...');
+            
+            try {
+                // Run tests
+                const results = await window.apiMigrationTests.runAllTests();
+                
+                // Log completion
+                logMessage(`Tests completed. Passed: ${results.passed}, Failed: ${results.failed}, Total: ${results.total}`);
+            } catch (error) {
+                logMessage(`Error running tests: ${error.message}`);
+                console.error('Test error:', error);
+            }
+        }
+        
+        // Clear test results
+        function clearResults() {
+            const container = document.getElementById('test-results-container');
+            container.innerHTML = '<h2>Test Results</h2><p>Click "Run All Tests" to start testing.</p>';
+            
+            const log = document.getElementById('test-log');
+            log.textContent = '';
+            
+            logMessage('Test results cleared.');
+        }
+        
+        // Log a message to the test log
+        function logMessage(message) {
+            const log = document.getElementById('test-log');
+            const timestamp = new Date().toLocaleTimeString();
+            log.textContent += `[${timestamp}] ${message}\n`;
+            log.scrollTop = log.scrollHeight;
+        }
+    </script>
+</body>
+</html>

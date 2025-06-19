@@ -1,0 +1,215 @@
+/**
+ * Minimal Tooltip System for Precipitation Bars
+ * 
+ * NO animations, NO containers, NO hover effects - only essential tooltips
+ */
+
+/* Base styling for precipitation segments with tooltip capability */
+.precipitation-hour-segment {
+  position: relative;
+  display: inline-block;
+  cursor: default;
+  /* NO transitions, NO animations, NO transforms */
+}
+
+/* NO hover effects - removed all hover styling that creates boxes and animations */
+
+/* Custom Tooltip - Hidden by default */
+.precipitation-hour-segment::before,
+.precipitation-hour-segment::after {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  /* NO transitions - instant appearance only */
+  z-index: 1000;
+}
+
+/* Tooltip Content Box */
+.precipitation-hour-segment::before {
+  content: attr(data-tooltip);
+  /* Simple tooltip styling */
+  background: #2c3e50;
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: pre-line;
+  text-align: center;
+  /* Simple shadow */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  /* Position below the element */
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  /* Minimum width for consistency */
+  min-width: 150px;
+  max-width: 250px;
+  /* Typography */
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Tooltip Arrow */
+.precipitation-hour-segment::after {
+  content: '';
+  /* Arrow pointing down to the tooltip */
+  border: 6px solid transparent;
+  border-bottom-color: #2c3e50;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+/* Show tooltip on hover - NO animations, instant appearance */
+/* CRITICAL FIX: Only show tooltips when data-tooltip attribute has actual content */
+.precipitation-hour-segment[data-tooltip]:not([data-tooltip=""]):hover::before,
+.precipitation-hour-segment[data-tooltip]:not([data-tooltip=""]):hover::after {
+  opacity: 1;
+}
+
+/* Focus states for accessibility - NO animations */
+.precipitation-hour-segment:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 1px;
+}
+
+/* CRITICAL FIX: Only show tooltips on focus when data-tooltip attribute has actual content */
+.precipitation-hour-segment[data-tooltip]:not([data-tooltip=""]):focus::before,
+.precipitation-hour-segment[data-tooltip]:not([data-tooltip=""]):focus::after {
+  opacity: 1;
+}
+
+/* Container - NO styling that creates boxes */
+.precipitation-bar-container {
+  position: relative;
+  overflow: visible;
+  /* Minimal spacing for tooltips */
+  margin-top: 2px;
+  margin-bottom: 8px;
+}
+
+/* NO container styling - removed all borders, backgrounds, padding */
+.precipitation-bar-container.segmented {
+  /* NO styling - bars should be seamless */
+}
+
+/* Segment alignment - NO margins, NO borders */
+.precipitation-bar-container.segmented .precipitation-hour-segment {
+  margin: 0;
+  border-radius: 0;
+}
+
+/* First and last segment border radius - minimal */
+.precipitation-bar-container.segmented .precipitation-hour-segment:first-child {
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.precipitation-bar-container.segmented .precipitation-hour-segment:last-child {
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+/* Dark mode tooltips */
+@media (prefers-color-scheme: dark) {
+  .precipitation-hour-segment::before {
+    background: #1a252f;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+  
+  .precipitation-hour-segment::after {
+    border-bottom-color: #1a252f;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .precipitation-hour-segment::before {
+    background: #000000;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    box-shadow: none;
+  }
+  
+  .precipitation-hour-segment::after {
+    border-bottom-color: #000000;
+    border-width: 8px;
+  }
+}
+
+/* Mobile touch optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .precipitation-hour-segment {
+    min-height: 24px;
+  }
+  
+  /* Show tooltips on touch/tap - NO animations */
+  /* CRITICAL FIX: Only show tooltips on touch when data-tooltip attribute has actual content */
+  .precipitation-hour-segment[data-tooltip]:not([data-tooltip=""]):active::before,
+  .precipitation-hour-segment[data-tooltip]:not([data-tooltip=""]):active::after {
+    opacity: 1;
+  }
+  
+  /* Larger tooltips for mobile */
+  .precipitation-hour-segment::before {
+    font-size: 14px;
+    padding: 10px 14px;
+    min-width: 175px;
+  }
+  
+  .precipitation-hour-segment::after {
+    border-width: 8px;
+  }
+}
+
+/* Reduced motion support - NO animations anywhere */
+@media (prefers-reduced-motion: reduce) {
+  .precipitation-hour-segment,
+  .precipitation-hour-segment:hover,
+  .precipitation-hour-segment:focus,
+  .precipitation-hour-segment:active,
+  .precipitation-hour-segment::before,
+  .precipitation-hour-segment::after {
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  
+  /* CRITICAL FIX: Only show tooltips on hover when data-tooltip attribute has actual content */
+  .precipitation-hour-segment[data-tooltip]:not([data-tooltip=""]):hover::before,
+  .precipitation-hour-segment[data-tooltip]:not([data-tooltip=""]):hover::after {
+    opacity: 1;
+  }
+}
+
+/* Print styles - hide tooltips */
+@media print {
+  .precipitation-hour-segment::before,
+  .precipitation-hour-segment::after {
+    display: none;
+  }
+}
+
+/* Tooltip positioning adjustments for edge cases */
+.precipitation-bar-container .precipitation-hour-segment:first-child::before {
+  left: 0;
+  transform: translateX(0) translateY(4px);
+}
+
+.precipitation-bar-container .precipitation-hour-segment:first-child::after {
+  left: 12px;
+  transform: translateX(0) translateY(-2px);
+}
+
+.precipitation-bar-container .precipitation-hour-segment:last-child::before {
+  right: 0;
+  left: auto;
+  transform: translateX(0) translateY(4px);
+}
+
+.precipitation-bar-container .precipitation-hour-segment:last-child::after {
+  right: 12px;
+  left: auto;
+  transform: translateX(0) translateY(-2px);
+}

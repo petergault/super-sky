@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Sky - Accessibility Tests</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/design-system.css">
+  <style>
+    /* Accessibility test specific styles */
+    .test-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .test-controls {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+    }
+    
+    .test-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    
+    .test-button {
+      padding: 8px 16px;
+      background-color: #e0e0e0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    
+    .test-button:hover {
+      background-color: #d0d0d0;
+    }
+    
+    .test-button.primary {
+      background-color: #4caf50;
+      color: white;
+    }
+    
+    .test-button.primary:hover {
+      background-color: #3e8e41;
+    }
+    
+    .a11y-summary {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+    }
+    
+    .a11y-stats {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin: 15px 0;
+    }
+    
+    .a11y-stat {
+      text-align: center;
+      padding: 10px;
+    }
+    
+    .a11y-stat-value {
+      display: block;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    
+    .a11y-stat-label {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .a11y-section {
+      margin-bottom: 30px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .a11y-section h3 {
+      margin: 0;
+      padding: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .a11y-failed h3 {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+    
+    .a11y-warning h3 {
+      background-color: #fff8e1;
+      color: #f57f17;
+    }
+    
+    .a11y-passed h3 {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+    
+    .a11y-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .a11y-item {
+      padding: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .a11y-item:last-child {
+      border-bottom: none;
+    }
+    
+    .a11y-element {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    
+    .a11y-recommendation {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #e3f2fd;
+      border-radius: 4px;
+    }
+    
+    .a11y-wcag {
+      margin: 10px 0;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .keyboard-test-area {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+    }
+    
+    .keyboard-test-area h3 {
+      margin-top: 0;
+    }
+    
+    .keyboard-test-elements {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    
+    .keyboard-test-element {
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .color-contrast-test {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+    }
+    
+    .color-contrast-test h3 {
+      margin-top: 0;
+    }
+    
+    .color-samples {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 15px 0;
+    }
+    
+    .color-sample {
+      width: 200px;
+      padding: 15px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    
+    .color-sample-info {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    
+    .pass {
+      color: #2e7d32;
+    }
+    
+    .fail {
+      color: #c62828;
+    }
+  </style>
+</head>
+<body>
+  <header class="header" role="banner">
+    <div class="container">
+      <h1>Super Sky - Accessibility Tests</h1>
+      <nav>
+        <a href="../index.html">Back to App</a>
+      </nav>
+    </div>
+  </header>
+  
+  <main class="main-content" role="main">
+    <div class="test-container">
+      <div class="card">
+        <h2>Phase 5: Accessibility Testing</h2>
+        <p>This page runs accessibility tests for the Super Sky app to ensure it meets WCAG 2.1 standards and is accessible to all users.</p>
+        
+        <div class="test-controls">
+          <h3>Test Controls</h3>
+          <div class="test-buttons">
+            <button id="run-all-tests" class="test-button primary">Run All Tests</button>
+            <button id="test-headings" class="test-button">Test Heading Structure</button>
+            <button id="test-images" class="test-button">Test Image Alt Text</button>
+            <button id="test-contrast" class="test-button">Test Color Contrast</button>
+            <button id="test-keyboard" class="test-button">Test Keyboard Accessibility</button>
+            <button id="test-aria" class="test-button">Test ARIA Attributes</button>
+          </div>
+        </div>
+        
+        <div id="test-results">
+          <!-- Test results will be displayed here -->
+        </div>
+        
+        <div class="keyboard-test-area">
+          <h3>Keyboard Navigation Test</h3>
+          <p>Use the Tab key to navigate through the elements below and verify that focus is visible and elements are accessible via keyboard.</p>
+          
+          <div class="keyboard-test-elements">
+            <a href="#" class="keyboard-test-element">Link Element</a>
+            <button class="keyboard-test-element">Button Element</button>
+            <input type="text" class="keyboard-test-element" placeholder="Text Input">
+            <select class="keyboard-test-element">
+              <option>Select Option 1</option>
+              <option>Select Option 2</option>
+            </select>
+            <div class="keyboard-test-element" tabindex="0" role="button" aria-pressed="false">
+              Custom Button (div with role)
+            </div>
+          </div>
+        </div>
+        
+        <div class="color-contrast-test">
+          <h3>Color Contrast Samples</h3>
+          <p>The following samples demonstrate different text and background color combinations with their contrast ratios.</p>
+          
+          <div class="color-samples">
+            <div class="color-sample" style="background-color: #ffffff; color: #000000;">
+              Black text on white background
+              <div class="color-sample-info pass">Contrast ratio: 21:1 (Pass)</div>
+            </div>
+            
+            <div class="color-sample" style="background-color: #ffffff; color: #767676;">
+              Gray text on white background
+              <div class="color-sample-info pass">Contrast ratio: 4.54:1 (Pass)</div>
+            </div>
+            
+            <div class="color-sample" style="background-color: #ffffff; color: #aaaaaa;">
+              Light gray text on white background
+              <div class="color-sample-info fail">Contrast ratio: 2.32:1 (Fail)</div>
+            </div>
+            
+            <div class="color-sample" style="background-color: #0056b3; color: #ffffff;">
+              White text on blue background
+              <div class="color-sample-info pass">Contrast ratio: 4.94:1 (Pass)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <p>&copy; 2025 Super Sky</p>
+      <p>
+        <small>
+          Phase 5 Implementation: Testing and Optimization
+        </small>
+      </p>
+    </div>
+  </footer>
+  
+  <!-- Load app utilities -->
+  <script src="../utils/helpers.js"></script>
+  <script src="../utils/accessibilityTester.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add event listeners to test buttons
+      document.getElementById('run-all-tests').addEventListener('click', () => {
+        const results = window.accessibilityTester.runAllTests();
+        window.accessibilityTester.displayTestResults(results, 'test-results');
+      });
+      
+      document.getElementById('test-headings').addEventListener('click', () => {
+        window.accessibilityTester.resetTestResults();
+        window.accessibilityTester.testHeadingStructure();
+        window.accessibilityTester.displayTestResults(window.accessibilityTester.testResults, 'test-results');
+      });
+      
+      document.getElementById('test-images').addEventListener('click', () => {
+        window.accessibilityTester.resetTestResults();
+        window.accessibilityTester.testImageAltText();
+        window.accessibilityTester.displayTestResults(window.accessibilityTester.testResults, 'test-results');
+      });
+      
+      document.getElementById('test-contrast').addEventListener('click', () => {
+        window.accessibilityTester.resetTestResults();
+        window.accessibilityTester.testColorContrast();
+        window.accessibilityTester.displayTestResults(window.accessibilityTester.testResults, 'test-results');
+      });
+      
+      document.getElementById('test-keyboard').addEventListener('click', () => {
+        window.accessibilityTester.resetTestResults();
+        window.accessibilityTester.testKeyboardAccessibility();
+        window.accessibilityTester.displayTestResults(window.accessibilityTester.testResults, 'test-results');
+      });
+      
+      document.getElementById('test-aria').addEventListener('click', () => {
+        window.accessibilityTester.resetTestResults();
+        window.accessibilityTester.testAriaAttributes();
+        window.accessibilityTester.displayTestResults(window.accessibilityTester.testResults, 'test-results');
+      });
+      
+      // Add keyboard event handlers to custom button
+      const customButton = document.querySelector('.keyboard-test-element[role="button"]');
+      customButton.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          customButton.setAttribute('aria-pressed', 
+            customButton.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+          
+          if (customButton.getAttribute('aria-pressed') === 'true') {
+            customButton.style.backgroundColor = '#e0e0e0';
+          } else {
+            customButton.style.backgroundColor = '#ffffff';
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
