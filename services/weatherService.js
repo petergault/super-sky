@@ -79,7 +79,7 @@ async function fetchAzureMapsData(zipCode) {
   
   try {
     // Use the back-end API endpoint instead of direct API calls
-    const url = `http://localhost:3000/api/weather/${zipCode}?source=azuremaps`;
+    const url = `/api/weather/${zipCode}?source=azuremaps`;
     const response = await fetch(url);
     
     if (!response.ok) {
@@ -185,7 +185,7 @@ async function fetchOpenMeteoData(zipCode) {
   
   try {
     // Use the back-end API endpoint instead of direct API calls
-    const url = `http://localhost:3000/api/weather/${zipCode}?source=openmeteo`;
+    const url = `/api/weather/${zipCode}?source=openmeteo`;
     const response = await fetch(url);
     
     if (!response.ok) {
@@ -367,7 +367,7 @@ async function fetchForecaData(zipCode) {
   
   try {
     // Use the back-end API endpoint instead of direct API calls
-    const url = `http://localhost:3000/api/weather/${zipCode}?source=foreca`;
+    const url = `/api/weather/${zipCode}?source=foreca`;
     const response = await fetch(url);
     
     if (!response.ok) {
@@ -459,7 +459,7 @@ async function fetchTripleCheckWeather(zipCode, forceRefresh = false) {
     }
 
     // Use the back-end API endpoint for fresh triple check data
-    const url = `http://localhost:3000/api/weather/${zipCode}/triple${forceRefresh ? '?forceRefresh=true' : ''}`;
+    const url = `/api/weather/${zipCode}/triple${forceRefresh ? '?forceRefresh=true' : ''}`;
     const response = await fetch(url);
     
     if (!response.ok) {
@@ -977,7 +977,7 @@ async function fetchGoogleWeatherData(zipCode) {
   
   try {
     // Use the back-end API endpoint
-    const url = `http://localhost:3000/api/weather/${zipCode}?source=googleweather`;
+    const url = `/api/weather/${zipCode}?source=googleweather`;
     const response = await fetch(url);
     
     if (!response.ok) {
