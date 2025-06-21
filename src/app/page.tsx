@@ -1,102 +1,175 @@
-import Image from "next/image";
+'use client';
 
+import React, { useState } from 'react';
+import { useWeather } from '../hooks/useWeather';
+import ZipCodeInput from '../components/ZipCodeInput';
+import WeatherDisplay from '../components/WeatherDisplay';
+
+/**
+ * Main App Component for Super Sky Weather App
+ */
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  // Use our custom hook to manage weather data
+  const {
+    zipCode,
+    data: weatherData,
+    isLoading,
+    error,
+    recentZipCodes,
+    setZipCodeAndFetch,
+    setZipCodeAndFetchTriple,
+    refreshData
+  } = useWeather();
+  
+  // State to track if we're showing comparison view
+  const [showComparison, setShowComparison] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  // Handler for ZIP code submission
+  const handleZipCodeSubmit = (zipCode: string) => {
+    if (showComparison) {
+      setZipCodeAndFetchTriple(zipCode);
+    } else {
+      setZipCodeAndFetch(zipCode);
+    }
+  };
+
+  // Handler for refresh button
+  const handleRefresh = () => {
+    if (showComparison && zipCode) {
+      setZipCodeAndFetchTriple(zipCode);
+    } else {
+      refreshData();
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-6xl mx-auto px-4 py-6">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Super Sky Weather
+            </h1>
+            <p className="text-gray-600">
+              Get accurate weather information from multiple sources
+            </p>
+          </div>
         </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-4xl mx-auto px-4 py-8">
+        {/* ZIP Code Input Section */}
+        <div className="mb-8">
+          <ZipCodeInput
+            onSubmit={handleZipCodeSubmit}
+            isLoading={isLoading}
+            recentZipCodes={recentZipCodes}
+            placeholder="Enter ZIP code (e.g., 12345)"
+          />
+        </div>
+
+        {/* Controls Section */}
+        <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-center items-center">
+          {/* Comparison Toggle */}
+          <div className="flex items-center gap-3">
+            <label htmlFor="comparison-toggle" className="text-sm font-medium text-gray-700">
+              Comparison View
+            </label>
+            <button
+              id="comparison-toggle"
+              type="button"
+              onClick={() => setShowComparison(!showComparison)}
+              className={`
+                relative inline-flex h-6 w-11 items-center rounded-full transition-colors
+                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                ${showComparison ? 'bg-blue-600' : 'bg-gray-200'}
+              `}
+              role="switch"
+              aria-checked={showComparison}
+            >
+              <span
+                className={`
+                  inline-block h-4 w-4 transform rounded-full bg-white transition-transform
+                  ${showComparison ? 'translate-x-6' : 'translate-x-1'}
+                `}
+              />
+            </button>
+          </div>
+
+          {/* Refresh Button */}
+          {weatherData && (
+            <button
+              onClick={handleRefresh}
+              disabled={isLoading}
+              className={`
+                inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg
+                border border-gray-300 bg-white text-gray-700
+                hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500
+                disabled:opacity-50 disabled:cursor-not-allowed
+                ${isLoading ? 'cursor-wait' : ''}
+              `}
+            >
+              <svg 
+                className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" 
+                />
+              </svg>
+              Refresh
+            </button>
+          )}
+        </div>
+
+        {/* Weather Display Section */}
+        <WeatherDisplay
+          zipCode={zipCode}
+          weatherData={weatherData}
+          isLoading={isLoading}
+          error={error}
+          showComparison={showComparison}
+        />
+
+        {/* Help Text */}
+        {!weatherData && !isLoading && !error && (
+          <div className="mt-8 text-center">
+            <div className="bg-blue-50 rounded-lg p-6 max-w-2xl mx-auto">
+              <h3 className="text-lg font-semibold text-blue-900 mb-2">
+                Welcome to Super Sky Weather
+              </h3>
+              <p className="text-blue-700 mb-4">
+                Enter a ZIP code above to get current weather conditions and forecasts.
+              </p>
+              <div className="text-sm text-blue-600 space-y-1">
+                <p>• Toggle "Comparison View" to see data from multiple weather services</p>
+                <p>• Recent searches are saved for quick access</p>
+                <p>• Data is cached for faster loading</p>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="bg-gray-50 border-t border-gray-200 mt-12">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="text-center text-gray-600">
+            <p className="mb-2">
+              Super Sky Weather App - Powered by multiple weather services
+            </p>
+            <p className="text-sm">
+              Data sources: Azure Maps (AccuWeather), Foreca, Open Meteo
+            </p>
+          </div>
+        </div>
       </footer>
     </div>
   );
