@@ -1,0 +1,130 @@
+/**
+ * Super Sky App - Service Indicators Styles
+ * 
+ * This file contains styles for the service indicators that help users
+ * identify which weather service each row represents.
+ */
+
+/* Service indicator base styles */
+.service-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 8px;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  color: white;
+  flex-shrink: 0;
+}
+
+/* Service-specific styles */
+.service-indicator-accuweather {
+  background-color: #FF9800; /* Orange */
+}
+
+.service-indicator-openmeteo {
+  background-color: #2196F3; /* Blue */
+}
+
+.service-indicator-noaa {
+  background-color: #2196F3; /* Blue for NOAA */
+}
+
+.service-indicator-foreca {
+  background-color: #F44336; /* Red */
+}
+
+.service-indicator-google {
+  background-color: #4CAF50; /* Green */
+}
+
+.service-indicator-default {
+  background-color: #95a5a6; /* Gray for unknown services */
+}
+
+/* Service indicator container */
+.service-cell-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: #333; /* Fixed: Changed from var(--color-secondary-dark) to ensure black text */
+  width: 100%; /* Ensure full width */
+  padding: 4px 0; /* Add vertical padding */
+}
+
+/* Service name text styling */
+.service-name-text {
+  color: #333; /* Fixed: Ensure service names are black for readability */
+  font-weight: 500;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .service-indicator {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    margin-right: 6px;
+  }
+}
+
+@media (max-width: 576px) {
+  .service-indicator {
+    width: 18px;
+    height: 18px;
+    font-size: 9px;
+    margin-right: 4px;
+  }
+  
+  /* Always show service names, even on small screens */
+  .service-name-text {
+    display: inline-block;
+    font-size: 9px;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .service-cell-content {
+    justify-content: flex-start; /* Keep left alignment */
+    padding-left: 4px; /* Add some padding */
+  }
+}
+
+/* Accessibility - high contrast mode */
+@media (forced-colors: active) {
+  .service-indicator {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Dark mode support - DISABLED for now since app background is always white */
+/* The application uses a white background regardless of system preference,
+   so we need to ensure text is always dark for readability */
+@media (prefers-color-scheme: dark) {
+  .service-cell-content {
+    color: #333 !important; /* Force dark text even in dark mode since app bg is white */
+  }
+  
+  .service-name-text {
+    color: #333 !important; /* Force dark text even in dark mode since app bg is white */
+  }
+}
+
+/* Ensure text is always readable regardless of background */
+.service-cell-content,
+.service-name-text {
+  text-shadow: none; /* Remove any text shadows that might interfere */
+}
+
+/* Animation for service indicators */
+.service-indicator {
+  transition: transform var(--transition-normal) var(--transition-timing);
+}
+
+.service-indicator:hover {
+  transform: scale(1.1);
+}

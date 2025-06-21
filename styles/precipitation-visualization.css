@@ -1,0 +1,251 @@
+/**
+ * Super Sky App - Precipitation Visualization Styles
+ * 
+ * NO animations, NO transitions, NO hover effects - static visualization only
+ */
+
+/* Precipitation Visualization Container */
+.precip-visualization {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-sm);
+  position: relative;
+  /* NO transitions - removed all animations */
+}
+
+/* Precipitation Types - Updated Classification System */
+.precip-trace {
+  background-color: #e6f3ff;
+  color: var(--color-secondary-dark);
+  border: none;
+}
+
+.precip-drizzle {
+  background-color: #d0d0d0;
+  color: var(--color-secondary-dark);
+}
+
+.precip-light-rain {
+  background-color: #5fb8e0;
+  color: var(--color-white);
+}
+
+.precip-moderate-rain {
+  background-color: #3a6ea8;
+  color: var(--color-white);
+}
+
+.precip-heavy-rain {
+  background-color: #6a006a;
+  color: var(--color-white);
+}
+
+/* Weather Conditions */
+.weather-sunny {
+  background-color: #ffcc00;
+  color: var(--color-secondary-dark);
+  /* NO transitions - removed all animations */
+}
+
+.weather-cloudy {
+  background-color: #999999;
+  color: var(--color-white);
+  /* NO transitions - removed all animations */
+}
+
+/* Weather condition container for dry days */
+.weather-condition {
+  width: 2rem;
+  height: 1.5rem;
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* NO transitions - removed all animations */
+}
+
+.weather-condition.weather-sunny {
+  background-color: #ffcc00;
+  color: var(--color-secondary-dark);
+}
+
+.weather-condition.weather-cloudy {
+  background-color: #999999;
+  color: var(--color-white);
+}
+
+/* Thunderstorm Indicator */
+.has-thunderstorm {
+  border: none;
+}
+
+/* Raindrop Icon - NO animations */
+.raindrop-icon {
+  width: 12px;
+  height: 16px;
+  background-color: #4d94ff;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(45deg);
+  position: relative;
+  margin: 0 auto;
+}
+
+.raindrop-icon::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50% 50% 50% 0;
+  background-color: inherit;
+  opacity: 0.7;
+  /* NO animations - removed raindropPulse */
+}
+
+/* NO animations - removed all keyframes */
+
+/* Precipitation Amount Display */
+.precip-amount {
+  font-size: var(--font-size-xs);
+  color: #0066cc;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Dark Mode Support for Precipitation Amount */
+@media (prefers-color-scheme: dark) {
+  .precip-amount {
+    color: #4d94ff;
+  }
+}
+
+/* Precipitation Tooltip */
+.precip-tooltip {
+  min-width: 200px;
+}
+
+.precip-tooltip h4 {
+  margin-bottom: var(--spacing-2);
+  font-weight: var(--font-weight-bold);
+  border: 0 !important;
+  padding-bottom: var(--spacing-1);
+}
+
+.precip-tooltip p {
+  margin-bottom: var(--spacing-1);
+  display: flex;
+  justify-content: space-between;
+}
+
+.precip-tooltip strong {
+  margin-right: var(--spacing-2);
+}
+
+/* Legend for Precipitation Visualization */
+.precip-legend {
+  margin-top: var(--spacing-3);
+  background-color: white !important;
+  padding: 10px;
+  border-radius: var(--border-radius);
+  border: none;
+}
+
+.precip-legend-title {
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-2);
+  color: black !important;
+}
+
+.precip-legend-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--spacing-2);
+}
+
+.precip-legend-item {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-sm);
+  color: black !important;
+}
+
+.precip-legend-color {
+  width: 16px;
+  height: 16px;
+  margin-right: var(--spacing-2);
+  border-radius: var(--border-radius-sm);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .precip-legend-items {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 576px) {
+  .precip-legend-items {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+  
+  .precip-tooltip {
+    min-width: 180px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  
+  
+  .weather-sunny {
+    background-color: #cc9900;
+    color: var(--color-black);
+  }
+  
+  .weather-cloudy {
+    background-color: #666666;
+    color: var(--color-white);
+  }
+  
+  .weather-condition.weather-sunny {
+    background-color: #cc9900;
+    color: var(--color-black);
+  }
+  
+  .weather-condition.weather-cloudy {
+    background-color: #666666;
+    color: var(--color-white);
+  }
+  
+  .precip-legend-item {
+    color: white;
+  }
+  
+  .precip-legend {
+    background-color: #333;
+    border: none;
+  }
+  
+  .precip-legend-title {
+    color: white;
+  }
+}
+
+/* Print styles */
+@media print {
+  .precip-legend {
+    background-color: white;
+    color: black;
+    border: 0 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  
+  .precip-legend-title,
+  .precip-legend-item {
+    color: black;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

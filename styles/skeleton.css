@@ -1,0 +1,264 @@
+/**
+ * Super Sky App - Skeleton Loader Styles
+ * 
+ * This file contains styles for skeleton loading screens:
+ * - Weather display skeleton
+ * - Comparison view skeleton
+ * - Settings skeleton
+ * - Hourly grid skeleton
+ */
+
+/* Base Skeleton Styles */
+.skeleton {
+  background: linear-gradient(90deg, 
+    var(--color-gray-200) 25%, 
+    var(--color-gray-300) 50%, 
+    var(--color-gray-200) 75%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: var(--border-radius-sm);
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+/* Skeleton Text */
+.skeleton-text {
+  height: 1em;
+  margin-bottom: 0.5em;
+  border-radius: var(--border-radius-sm);
+}
+
+.skeleton-title {
+  width: 70%;
+  height: 1.5em;
+  margin-bottom: 1em;
+}
+
+.skeleton-subtitle {
+  width: 50%;
+}
+
+/* Skeleton Card */
+.skeleton-card {
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow);
+  margin-bottom: var(--spacing-4);
+}
+
+/* Weather Skeleton */
+.skeleton-weather {
+  padding: var(--spacing-6);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow);
+  margin-bottom: var(--spacing-4);
+}
+
+.skeleton-weather-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+}
+
+.skeleton-weather-content {
+  display: flex;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-4);
+}
+
+.skeleton-weather-temp {
+  width: 100px;
+  height: 60px;
+  border-radius: var(--border-radius);
+}
+
+.skeleton-weather-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+/* Comparison Skeleton */
+.skeleton-comparison {
+  padding: var(--spacing-6);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow);
+  margin-bottom: var(--spacing-4);
+}
+
+.skeleton-tabs {
+  display: flex;
+  gap: var(--spacing-2);
+  margin: var(--spacing-4) 0;
+}
+
+.skeleton-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-4);
+}
+
+.skeleton-row {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.skeleton-row > div {
+  flex: 1;
+  height: 40px;
+}
+
+.skeleton-row:first-child > div {
+  background-color: var(--color-gray-300);
+}
+
+/* Settings Skeleton */
+.skeleton-settings {
+  padding: var(--spacing-6);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow);
+  margin-bottom: var(--spacing-4);
+}
+
+.skeleton-section {
+  margin-bottom: var(--spacing-6);
+}
+
+/* Staggered Animation for Multiple Skeletons */
+.skeleton-row:nth-child(1) { animation-delay: 0ms; }
+.skeleton-row:nth-child(2) { animation-delay: 100ms; }
+.skeleton-row:nth-child(3) { animation-delay: 200ms; }
+.skeleton-row:nth-child(4) { animation-delay: 300ms; }
+
+.skeleton-weather-details > div:nth-child(1) { animation-delay: 0ms; }
+.skeleton-weather-details > div:nth-child(2) { animation-delay: 50ms; }
+.skeleton-weather-details > div:nth-child(3) { animation-delay: 100ms; }
+.skeleton-weather-details > div:nth-child(4) { animation-delay: 150ms; }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .skeleton-weather-content {
+    flex-direction: column;
+  }
+  
+  .skeleton-weather-temp {
+    width: 80px;
+    height: 50px;
+  }
+  
+  .skeleton-row > div {
+    height: 30px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none !important;
+    background: var(--color-gray-300);
+  }
+}
+
+/* Hourly Grid Skeleton */
+.skeleton-hourly-grid {
+  padding: var(--spacing-6);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow);
+  margin-bottom: var(--spacing-4);
+}
+
+.skeleton-day-selector {
+  display: flex;
+  gap: var(--spacing-2);
+  margin: var(--spacing-4) 0;
+  overflow-x: auto;
+  padding-bottom: var(--spacing-2);
+}
+
+.skeleton-day-stats {
+  display: flex;
+  gap: var(--spacing-6);
+  margin: var(--spacing-4) 0;
+  padding: var(--spacing-3);
+  background-color: var(--color-gray-100);
+  border-radius: var(--border-radius);
+}
+
+.skeleton-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  margin: var(--spacing-4) 0;
+  overflow-x: auto;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-2);
+}
+
+.skeleton-grid-row {
+  display: flex;
+  gap: var(--spacing-2);
+  min-height: 60px;
+  border-bottom: 1px solid var(--color-gray-200);
+  padding-bottom: var(--spacing-2);
+}
+
+.skeleton-grid-row:last-child {
+  border-bottom: none;
+}
+
+.skeleton-legend {
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-4);
+  background-color: var(--color-gray-100);
+  border-radius: var(--border-radius);
+}
+
+.skeleton-legend-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-3);
+}
+
+/* Staggered Animation for Hourly Grid */
+.skeleton-day-selector > div:nth-child(1) { animation-delay: 0ms; }
+.skeleton-day-selector > div:nth-child(2) { animation-delay: 50ms; }
+.skeleton-day-selector > div:nth-child(3) { animation-delay: 100ms; }
+.skeleton-day-selector > div:nth-child(4) { animation-delay: 150ms; }
+.skeleton-day-selector > div:nth-child(5) { animation-delay: 200ms; }
+.skeleton-day-selector > div:nth-child(6) { animation-delay: 250ms; }
+.skeleton-day-selector > div:nth-child(7) { animation-delay: 300ms; }
+
+.skeleton-grid-row:nth-child(1) { animation-delay: 0ms; }
+.skeleton-grid-row:nth-child(2) { animation-delay: 100ms; }
+.skeleton-grid-row:nth-child(3) { animation-delay: 200ms; }
+.skeleton-grid-row:nth-child(4) { animation-delay: 300ms; }
+
+/* Responsive Adjustments for Hourly Grid */
+@media (max-width: 768px) {
+  .skeleton-day-selector > div {
+    min-width: 70px;
+    height: 50px;
+  }
+  
+  .skeleton-grid-row > div {
+    min-width: 45px;
+  }
+  
+  .skeleton-day-stats {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+}

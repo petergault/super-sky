@@ -1,0 +1,475 @@
+/**
+ * Super Sky App - Responsive Design
+ *
+ * This file contains responsive design styles for different screen sizes:
+ * - Mobile (< 576px)
+ * - Tablet (576px - 768px)
+ * - Desktop Small (768px - 992px)
+ * - Desktop Large (992px+)
+ *
+ * Phase 4 enhancements:
+ * - Added responsive styles for service indicators
+ * - Improved mobile layout for comparison views
+ * - Enhanced visual hierarchy for different screen sizes
+ * - Added collapsible sections for small screens
+ */
+
+/* Base Mobile-First Approach */
+/* These styles apply to all devices and are enhanced for larger screens */
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 var(--spacing-4);
+  margin: 0 auto;
+}
+
+/* Header */
+.header-logo {
+  height: 60px;
+  width: 90px;
+}
+
+.header h1 {
+  font-size: var(--font-size-xl);
+}
+
+/* Controls Row */
+.controls-row {
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+/* Cache Controls */
+.cache-controls {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.cache-controls .btn {
+  flex: 1;
+  padding: var(--spacing-2) var(--spacing-3);
+  font-size: var(--font-size-sm);
+}
+
+/* View Toggle */
+.view-toggle {
+  width: 100%;
+}
+
+.view-toggle .btn {
+  width: 100%;
+}
+
+/* Comparison View */
+.view-controls {
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.comparison-tabs {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.display-controls {
+  width: 100%;
+}
+
+.comparison-grid {
+  font-size: var(--font-size-xs);
+}
+
+.comparison-cell {
+  padding: var(--spacing-2);
+  min-width: 70px;
+}
+
+/* Service indicators responsive styles */
+.service-cell-content {
+  justify-content: flex-start;
+}
+
+/* Emphasize important information */
+.day-name, .high-temp, .precip-indicator {
+  font-weight: var(--font-weight-bold);
+}
+
+/* Weather Display */
+.weather-info {
+  flex-direction: column;
+}
+
+.current-weather {
+  padding: var(--spacing-3);
+}
+
+.temperature {
+  font-size: var(--font-size-2xl);
+}
+
+/* App Settings */
+.app-settings h2 {
+  font-size: var(--font-size-xl);
+}
+
+.settings-section h3 {
+  font-size: var(--font-size-lg);
+}
+
+/* Help Section */
+.faq-question {
+  padding: var(--spacing-3);
+  font-size: var(--font-size-base);
+}
+
+.faq-answer {
+  padding: var(--spacing-3);
+  font-size: var(--font-size-sm);
+}
+
+/* Footer */
+.footer {
+  padding: var(--spacing-4) 0;
+  font-size: var(--font-size-sm);
+}
+
+.footer-logo-image {
+  width: 200px;
+  height: 200px;
+}
+
+@media (max-width: 768px) {
+  .footer-logo-image {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-logo {
+    margin-bottom: 1rem;
+  }
+  
+  .footer-logo-image {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* Touch-friendly controls for mobile */
+.btn, 
+.tab-button, 
+.form-input,
+.display-mode-select,
+.faq-question {
+  min-height: 44px; /* Minimum touch target size */
+}
+
+.info-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Tablet (576px and up) */
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+    padding: 0 var(--spacing-4);
+  }
+  
+  .header-logo {
+    height: 60px;
+    width: 90px;
+  }
+
+  .header h1 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .controls-row {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .view-toggle {
+    width: auto;
+  }
+  
+  .view-toggle .btn {
+    width: auto;
+  }
+  
+  .cache-controls {
+    width: auto;
+  }
+  
+  .comparison-grid {
+    font-size: var(--font-size-sm);
+  }
+  
+  .comparison-cell {
+    padding: var(--spacing-3);
+  }
+  
+  .temperature {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+/* Desktop Small (768px and up) */
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+    padding: 0 var(--spacing-6);
+  }
+  
+  .view-controls {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .comparison-tabs {
+    width: auto;
+  }
+  
+  .display-controls {
+    width: auto;
+  }
+  
+  .weather-info {
+    flex-direction: row;
+    gap: var(--spacing-6);
+  }
+  
+  .current-weather {
+    flex: 2;
+  }
+  
+  .source-info {
+    flex: 1;
+  }
+  
+  .comparison-grid {
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Desktop Large (992px and up) */
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+    padding: 0 var(--spacing-8);
+  }
+  
+  .header h1 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .card {
+    padding: var(--spacing-6);
+  }
+  
+  .comparison-cell {
+    padding: var(--spacing-4);
+  }
+  
+  /* Two-column layout for settings and help */
+  .settings-help-container {
+    display: flex;
+    gap: var(--spacing-6);
+  }
+  
+  .app-settings,
+  .help-section {
+    flex: 1;
+  }
+}
+
+/* Extra Large Desktop (1200px and up) */
+@media (min-width: 1200px) {
+  .container {
+    max-width: var(--container-max-width);
+  }
+}
+
+/* Specific Mobile Optimizations */
+
+/* iPhone SE and other small devices */
+@media (max-width: 375px) {
+  .header-logo {
+    height: 60px;
+    width: 90px;
+  }
+
+  .header h1 {
+    font-size: var(--font-size-lg);
+  }
+  
+  .btn {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-sm);
+  }
+  
+  .comparison-cell {
+    padding: var(--spacing-1);
+    min-width: 60px;
+    font-size: var(--font-size-xs);
+  }
+  
+  /* Alternative layout for very small screens */
+  .service-name-text {
+    display: none; /* Only show service indicator on very small screens */
+  }
+  
+  .service-cell-content {
+    justify-content: center;
+  }
+  
+  /* Collapsible sections for very small screens */
+  .comparison-legend,
+  .hourly-legend {
+    max-height: 100px;
+    overflow-y: auto;
+  }
+  
+  /* Stack day buttons in a grid for very small screens */
+  .day-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-2);
+  }
+  
+  .day-button {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+/* Landscape Mode */
+@media (max-height: 500px) and (orientation: landscape) {
+  .header {
+    padding: var(--spacing-2) 0;
+  }
+  
+  .header h1 {
+    font-size: var(--font-size-lg);
+  }
+  
+  .main-content {
+    padding: var(--spacing-2) 0;
+  }
+  
+  .card {
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+  }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background-color: white;
+    color: black;
+  }
+  
+  .header,
+  .footer,
+  .controls-row,
+  .view-controls,
+  .app-settings,
+  .help-section {
+    display: none;
+  }
+  
+  .card {
+    box-shadow: none;
+    border: 0 !important;
+    break-inside: avoid;
+  }
+  
+  .comparison-grid {
+    border-collapse: collapse;
+  }
+  
+  .comparison-cell {
+    border: 0 !important;
+  }
+}
+
+/* High-DPI Screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-body: var(--color-gray-900);
+    --bg-card: var(--color-gray-800);
+    --text-primary: var(--color-gray-100);
+    --text-secondary: var(--color-gray-300);
+    --text-muted: var(--color-gray-400);
+    --border-color: var(--color-gray-700);
+  }
+  
+  .skeleton {
+    background: linear-gradient(90deg, 
+      var(--color-gray-700) 25%, 
+      var(--color-gray-600) 50%, 
+      var(--color-gray-700) 75%);
+  }
+  
+  .faq-question:hover {
+    background-color: var(--color-gray-700);
+  }
+  
+  .faq-answer {
+    background-color: var(--color-gray-700);
+  }
+}
+
+/* Touch-specific optimizations */
+@media (hover: none) {
+  .btn:hover,
+  .tab-button:hover,
+  .faq-question:hover,
+  .hour-data:hover .hour-temp,
+  .service-indicator:hover {
+    /* Remove hover effects on touch devices */
+    transform: none;
+    background-color: inherit;
+  }
+  
+  /* Increase touch targets */
+  .tab-button,
+  .btn,
+  .form-input,
+  select,
+  .faq-question,
+  .service-indicator {
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+  
+  /* Make service indicators more touch-friendly */
+  .service-indicator {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .service-indicator,
+  .hour-data .hour-temp,
+  .day-button,
+  .tab-button {
+    transition: none !important;
+  }
+}

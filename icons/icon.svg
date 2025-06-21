@@ -1,0 +1,31 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#3498db" rx="64" ry="64"/>
+  
+  <!-- Weather icons -->
+  <!-- Sun -->
+  <circle cx="150" cy="150" r="60" fill="#f1c40f"/>
+  <g fill="#f1c40f">
+    <rect x="145" y="50" width="10" height="40" rx="5" ry="5"/>
+    <rect x="145" y="210" width="10" height="40" rx="5" ry="5"/>
+    <rect x="50" y="145" width="40" height="10" rx="5" ry="5"/>
+    <rect x="210" y="145" width="40" height="10" rx="5" ry="5"/>
+    <rect x="80" y="80" width="10" height="10" rx="5" ry="5" transform="rotate(45 85 85)"/>
+    <rect x="210" y="210" width="10" height="10" rx="5" ry="5" transform="rotate(45 215 215)"/>
+    <rect x="80" y="210" width="10" height="10" rx="5" ry="5" transform="rotate(-45 85 215)"/>
+    <rect x="210" y="80" width="10" height="10" rx="5" ry="5" transform="rotate(-45 215 85)"/>
+  </g>
+  
+  <!-- Cloud -->
+  <path d="M370 180 C 330 180, 300 220, 310 260 C 260 260, 220 310, 240 360 C 260 400, 340 400, 360 360 C 390 380, 430 360, 440 330 C 460 290, 430 250, 390 250 C 390 220, 380 180, 370 180 Z" fill="white"/>
+  
+  <!-- Rain drops -->
+  <g fill="#2980b9">
+    <path d="M280 380 C 280 400, 300 400, 300 380 C 300 360, 290 350, 290 350 C 290 350, 280 360, 280 380 Z"/>
+    <path d="M320 400 C 320 420, 340 420, 340 400 C 340 380, 330 370, 330 370 C 330 370, 320 380, 320 400 Z"/>
+    <path d="M360 380 C 360 400, 380 400, 380 380 C 380 360, 370 350, 370 350 C 370 350, 360 360, 360 380 Z"/>
+  </g>
+  
+  <!-- Triple Check text -->
+  <text x="256" y="460" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="white">TRIPLE CHECK</text>
+</svg>

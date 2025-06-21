@@ -1,0 +1,87 @@
+/* Migration Notice Styles */
+.api-migration-notice {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  animation: slideDown 0.5s ease-out;
+}
+
+.notice-content {
+  background-color: #f8f9fa;
+  border-left: 4px solid #4285f4;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px 20px;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+}
+
+.notice-content h3 {
+  margin-top: 0;
+  color: #4285f4;
+  font-size: 1.1rem;
+}
+
+.notice-content p {
+  margin-bottom: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.btn-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.btn-close:hover {
+  background-color: rgba(108, 117, 125, 0.1);
+  color: #495057;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .api-migration-notice {
+    top: 60px;
+  }
+  
+  .notice-content {
+    padding: 12px 15px;
+  }
+  
+  .notice-content h3 {
+    font-size: 1rem;
+  }
+  
+  .notice-content p {
+    font-size: 0.9rem;
+  }
+}

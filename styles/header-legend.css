@@ -1,0 +1,118 @@
+/* Header row container for location and legend - Seamless integration */
+.header-row-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0px;
+  gap: 20px;
+  padding: 1rem;
+  padding-left: 20px; /* Align with left edge of weather data grid */
+  max-width: 1800px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  min-height: 60px;
+}
+
+.location-header {
+  margin: 0;
+  font-size: 1.6rem;
+  color: #333;
+  text-align: left;
+  flex: 1;
+  font-weight: 600;
+}
+
+.header-legend {
+  margin: 0 !important;
+  margin-top: 0 !important;
+  padding: 0 !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  position: static !important;
+  flex: 0 0 auto;
+  text-align: right;
+}
+
+/* New dedicated class for header precipitation legend - no conflicts */
+.header-precipitation-legend {
+  margin: 0 !important;
+  margin-top: 0 !important;
+  padding: 0 !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  position: static !important;
+  flex: 0 0 auto;
+  text-align: right;
+  display: flex;
+  align-items: center;
+}
+
+.header-legend .legend-items,
+.header-precipitation-legend .legend-items {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 15px;
+  align-items: center;
+}
+
+.header-legend .legend-item,
+.header-precipitation-legend .legend-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+/* Responsive adjustments for header row - Keep horizontal layout */
+@media (max-width: 768px) {
+  .header-row-container {
+    /* Keep flex-direction: row to maintain horizontal layout */
+    gap: 15px;
+    padding: 0.75rem;
+    padding-left: 20px; /* Maintain alignment with weather data grid */
+    min-height: 50px;
+  }
+  
+  .location-header {
+    font-size: 1.4rem;
+  }
+  
+  .header-legend .legend-items,
+  .header-precipitation-legend .legend-items {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .header-legend .legend-item,
+  .header-precipitation-legend .legend-item {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .header-row-container {
+    padding: 0.5rem;
+    padding-left: 20px; /* Maintain alignment with weather data grid */
+    gap: 10px;
+    min-height: 45px;
+  }
+  
+  .location-header {
+    font-size: 1.2rem;
+  }
+  
+  .header-legend .legend-items,
+  .header-precipitation-legend .legend-items {
+    gap: 6px;
+  }
+  
+  .header-legend .legend-item,
+  .header-precipitation-legend .legend-item {
+    font-size: 0.8rem;
+  }
+}

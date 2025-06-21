@@ -1,0 +1,707 @@
+/**
+ * HourlyComparisonGrid Component
+ *
+ * This component displays hourly precipitation forecasts from multiple weather services in a grid format.
+ * It shows data from three premium weather services:
+ * - Azure AccuWeather API (top row)
+ * - Open Meteo API (middle row)
+ * - Foreca Rapid API (bottom row)
+ *
+ * Each day displays:
+ * - Day name (e.g., "Saturday")
+ * - High temperature from Azure AccuWeather (daily summary only)
+ * - Average humidity from Azure AccuWeather (daily summary only)
+ *
+ * Each hourly cell displays:
+ * - Precipitation amount and visualization (color-coded indicators)
+ * - Weather conditions (sunny, cloudy, thunderstorms)
+ * - Tooltip with detailed precipitation information
+ *
+ * Phase 2 Enhancement:
+ * - Precipitation visualization with color-coded indicators
+ * - Tooltip system for detailed precipitation information
+ *
+ * Phase 3 Enhancement:
+ * - Smart Display Logic for dry vs. rainy days
+ * - Simplified view for days with no rain predicted
+ * - Focus on sunny vs. cloudy conditions for dry days
+ *
+ * Phase 4 Enhancement:
+ * - Added service indicators for each weather source
+ * - Improved visual hierarchy with dividing lines
+ * - Enhanced responsive design for all device sizes
+ * - Added UI polish with consistent spacing and animations
+ *
+ * Phase 5 Enhancement:
+ * - Removed hourly temperature display to focus on precipitation data
+ * - Simplified hourly cells to show only rain amounts and conditions
+ * - Maintained daily temperature summaries for overall context
+ */
+
+// Simulate React hooks
+const { useState, useCallback, useMemo, memo, useEffect } = React;
+
+// Import the proper Tooltip component from the global window object
+// This component properly renders HTML content using dangerouslySetInnerHTML
+
+/**
+ * Hourly Comparison Grid component
+ * @param {Object} props - Component props
+ * @param {Array} props.weatherData - Array of weather data from different sources
+ * @param {boolean} props.isLoading - Whether data is loading
+ * @param {string} props.error - Error message if any
+ * @returns {JSX.Element} - Rendered component
+ */
+const HourlyComparisonGrid = memo(({ weatherData, isLoading, error, initialDayIndex = 0 }) => {
+  // State for selected day index (0-6 for a week)
+  const [selectedDayIndex, setSelectedDayIndex] = useState(initialDayIndex);
+  
+  // Process data safely - must be done before any hooks that depend on it
+  // FIXED: Don't filter out services with errors - we want to show all three services
+  // Instead of filtering, we'll handle errors appropriately in the rendering
+  const validData = weatherData && Array.isArray(weatherData) ? weatherData : [];
+  
+  // Log services for debugging
+  validData.forEach(data => {
+    console.log(`Service ${data.source} included (isError=${data.isError})`);
+  });
+  
+  // Safely get location info - use the first non-error service for location info
+  const nonErrorData = validData.filter(data => !data.isError);
+  const location = nonErrorData.length > 0 ? nonErrorData[0]?.location :
+                  (validData.length > 0 ? validData[0]?.location : null);
+  
+  // Generate an array of the next 7 days - must be defined before any hooks that depend on it
+  const days = useMemo(() => {
+    const result = [];
+    const today = new Date();
+    
+    for (let i = 0; i < 10; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      
+      // Format the day name (e.g., "Monday")
+      const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
+      
+      // Format the date (e.g., "Jan 1")
+      const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      
+      result.push({
+        dayName,
+        dateStr,
+        date,
+        index: i
+      });
+    }
+    
+    return result;
+  }, []);
+  
+  // Get the selected day
+  const selectedDay = days[selectedDayIndex];
+  
+  // Handle day selection
+  const handleDaySelect = useCallback((index) => {
+    setSelectedDayIndex(index);
+  }, []);
+  
+  // Get high temperature and average humidity for a day from Azure AccuWeather (first source)
+  const getDayStats = useCallback((dayIndex) => {
+    // Use the first source (Azure AccuWeather) for these stats
+    const azureData = validData.find(data => data.source === 'AzureMaps') || validData[0];
+    
+    if (!azureData || !azureData.daily || !azureData.daily[dayIndex]) {
+      return { highTemp: 'N/A', avgHumidity: 'N/A' };
+    }
+    
+    const dayData = azureData.daily[dayIndex];
+    
+    // Get high temperature
+    const highTemp = dayData.temperatureMax !== undefined 
+      ? window.helpers.formatTemperature(dayData.temperatureMax)
+      : 'N/A';
+    
+    // Get average humidity
+    const avgHumidity = dayData.humidity !== undefined
+      ? `${dayData.humidity}%`
+      : 'N/A';
+    
+    return { highTemp, avgHumidity };
+  }, [validData]);
+  
+  // Get hourly data for the selected day from all sources
+  const getHourlyDataForDay = useCallback((dayIndex) => {
+    // Check if we have valid hourly data
+    const hasValidHourlyData = validData.some(source =>
+      source.hourly && Array.isArray(source.hourly) && source.hourly.length > 0
+    );
+    
+    // If we don't have valid hourly data, return empty data (no mock data fallback)
+    if (!hasValidHourlyData) {
+      console.log(`No valid hourly data available for day ${dayIndex}`);
+      return validData.map(source => ({
+        source: source.source,
+        hours: [],
+        isError: true,
+        errorMessage: "No data available"
+      }));
+    }
+    
+    const result = [];
+    
+    // For each source
+    validData.forEach(source => {
+      // If source is rate limited, return empty data (no mock data fallback)
+      if (source.rateLimited) {
+        console.log(`Source ${source.source} is rate limited, no data will be shown`);
+        result.push({
+          source: source.source,
+          hours: [],
+          rateLimited: true,
+          isError: true,
+          errorMessage: "Rate limit exceeded. No data available."
+        });
+        return;
+      }
+      
+      // Skip if no hourly data
+      if (!source.hourly || !Array.isArray(source.hourly)) {
+        result.push({
+          source: source.source,
+          hours: []
+        });
+        return;
+      }
+      
+      // Get the selected day's date at midnight
+      const selectedDate = new Date(days[dayIndex].date);
+      selectedDate.setHours(0, 0, 0, 0);
+      
+      // Filter hourly data for the selected day
+      const hoursForDay = source.hourly.filter(hour => {
+        if (!hour || !hour.timestamp) return false;
+        
+        const hourDate = new Date(hour.timestamp);
+        const hourDay = new Date(hourDate);
+        hourDay.setHours(0, 0, 0, 0);
+        
+        return hourDay.getTime() === selectedDate.getTime();
+      });
+      
+      // Special handling for Google Weather API which may not have all 24 hours
+      if (source.source === 'GoogleWeather' && hoursForDay.length > 0 && hoursForDay.length < 24) {
+        console.log(`Google Weather API has ${hoursForDay.length} hours for day ${dayIndex}`);
+        
+        // Create an array with the available hours (may not be all 24)
+        const hourlyData = Array(24).fill(null);
+        
+        hoursForDay.forEach(hour => {
+          if (!hour || !hour.timestamp) return;
+          
+          const hourDate = new Date(hour.timestamp);
+          const hourIndex = hourDate.getHours();
+          hourlyData[hourIndex] = hour;
+        });
+        
+        // Add a note about limited data
+        result.push({
+          source: source.source,
+          hourly: hourlyData,
+          limitedData: true,
+          hoursAvailable: hoursForDay.length
+        });
+        return;
+      }
+      
+      // Standard handling for other sources
+      // Group by hour (0-23)
+      const hourlyData = Array(24).fill(null);
+      
+      hoursForDay.forEach(hour => {
+        if (!hour || !hour.timestamp) return;
+        
+        const hourDate = new Date(hour.timestamp);
+        const hourIndex = hourDate.getHours();
+        hourlyData[hourIndex] = hour;
+      });
+      
+      // Log for debugging
+      console.log(`Source ${source.source} has ${hoursForDay.length} hours for day ${dayIndex}`);
+      
+      result.push({
+        source: source.source,
+        hourly: hourlyData
+      });
+      
+      // Debug: Log the hourly data structure
+      // More detailed logging
+      const validHours = hourlyData.filter(h => h !== null);
+      const precipValues = validHours.map(h => h.precipitation);
+      console.log(`[DEBUG] ${source.source} hourly data for day ${dayIndex}:`, {
+        hasData: validHours.length > 0,
+        validHourCount: validHours.length,
+        sampleHour: validHours[0],
+        precipitationValues: precipValues.slice(0, 10),
+        hasPrecipitation: precipValues.some(p => p > 0),
+        maxPrecipitation: Math.max(...precipValues.filter(p => p !== null && p !== undefined))
+      });
+    });
+    
+    return result;
+  }, [validData, days]);
+  // Get hourly data for the selected day
+  const hourlyData = useMemo(() => getHourlyDataForDay(selectedDayIndex), [getHourlyDataForDay, selectedDayIndex]);
+  
+  // Get stats for the selected day
+  const { highTemp, avgHumidity } = useMemo(() => getDayStats(selectedDayIndex), [getDayStats, selectedDayIndex]);
+  
+  /**
+   * Renders a service indicator based on the source name
+   * @param {string} sourceName - The name of the weather service
+   * @returns {JSX.Element} - The service indicator
+   */
+  const renderServiceIndicator = useCallback((sourceName) => {
+    // Use the service name mapper to get display name and indicator info
+    const displayName = window.serviceNameMapper ?
+      window.serviceNameMapper.getServiceDisplayName(sourceName) :
+      sourceName;
+    
+    const indicatorInfo = window.serviceNameMapper ?
+      window.serviceNameMapper.getServiceIndicator(sourceName) :
+      { letter: sourceName.charAt(0).toUpperCase(), colorClass: 'service-indicator-default' };
+    
+    return (
+      <div className={`service-indicator ${indicatorInfo.colorClass}`}
+           aria-label={displayName}
+           title={displayName}>
+        {indicatorInfo.letter}
+      </div>
+    );
+  }, []);
+  
+  // Now that all hooks are defined, we can handle early returns
+  if (isLoading) {
+    return <SkeletonLoader type="hourly-grid" />;
+  }
+  
+  if (error) {
+    return (
+      <div className="hourly-comparison-grid card" role="region" aria-label="Hourly weather comparison error">
+        <div className="error" role="alert">
+          <h3>Error</h3>
+          <p>{error}</p>
+          <p>Please try again or check your internet connection.</p>
+        </div>
+      </div>
+    );
+  }
+  
+  if (!weatherData || !Array.isArray(weatherData) || weatherData.length === 0) {
+    return (
+      <div className="hourly-comparison-grid card" role="region" aria-label="Hourly weather comparison placeholder">
+        <div className="weather-placeholder">
+          <p>Enter a ZIP code to see hourly weather comparisons</p>
+        </div>
+      </div>
+    );
+  }
+  
+  if (validData.length === 0) {
+    return (
+      <div className="hourly-comparison-grid card" role="region" aria-label="Hourly weather comparison error">
+        <div className="error" role="alert">
+          <h3>Error</h3>
+          <p>Unable to fetch weather data from any source. Please try again.</p>
+          <p>This may be due to network issues or service unavailability.</p>
+        </div>
+      </div>
+    );
+  }
+  
+  // Safe to render the full component now
+  return (
+    <div className="hourly-comparison-grid card" role="region" aria-label="Hourly weather comparison">
+      <h2>Hourly Forecast for {location?.city}, {location?.state} ({location?.zipCode})</h2>
+      
+      {/* Day selector */}
+      <div className="day-selector">
+        {days.map((day, index) => (
+          <button
+            key={index}
+            className={`day-button ${index === selectedDayIndex ? 'active' : ''}`}
+            onClick={() => handleDaySelect(index)}
+            aria-pressed={index === selectedDayIndex ? "true" : "false"}
+          >
+            <div className="day-name">{day.dayName}</div>
+            <div className="day-date">{day.dateStr}</div>
+          </button>
+        ))}
+      </div>
+      
+      {/* Day stats */}
+      <div className="day-stats">
+        <div className="stat">
+          <span className="stat-label">High:</span>
+          <span className="stat-value">{highTemp}</span>
+        </div>
+        <div className="stat">
+          <span className="stat-label">Avg Humidity:</span>
+          <span className="stat-value">{avgHumidity}</span>
+        </div>
+      </div>
+      
+      {/* Hourly grid with horizontal scroll container */}
+      <div className="hourly-grid-container">
+        <table className="hourly-grid">
+          {/* Time header row */}
+          <thead>
+            <tr className="hourly-row header-row">
+              <th className="hourly-cell source-cell">Source</th>
+              {Array.from({ length: 24 }, (_, i) => (
+                <th key={i} className="hourly-cell time-cell">
+                  <div style={{lineHeight: '1.1'}}>
+                    <div>{i === 0 ? '12' : i <= 12 ? i : i-12}</div>
+                    <div style={{fontSize: '0.6rem'}}>{i < 12 ? 'am' : 'pm'}</div>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          
+          {/* Data rows for each source */}
+          <tbody>
+            {hourlyData.map((sourceData, sourceIndex) => (
+              <React.Fragment key={sourceIndex}>
+                {/* Combined row with service name and precipitation bars */}
+                <tr className="hourly-row data-row precipitation-row">
+                  <th className="hourly-cell source-cell">
+                    <div className="service-cell-content">
+                      {renderServiceIndicator(sourceData.source)}
+                      <span className="service-name-text" title={sourceData.source}>
+                        {window.serviceNameMapper ?
+                          window.serviceNameMapper.getServiceDisplayName(sourceData.source) :
+                          sourceData.source}
+                        {sourceData.rateLimited && <small style={{color: '#e74c3c', marginLeft: '5px'}}>(Rate Limited)</small>}
+                      </span>
+                    </div>
+                  </th>
+                  {sourceData.isError || sourceData.rateLimited ? (
+                    // Display error message when the service has an error or is rate limited
+                    <td className="hourly-cell data-cell no-data-available" colSpan="24">
+                      <div className="no-data-message error-message">
+                        {sourceData.errorMessage || "No data available"}
+                      </div>
+                    </td>
+                  ) : sourceData.hourly && sourceData.hourly.length > 0 ? (
+                    // Precipitation bar cell
+                    <td className="hourly-cell data-cell bar-chart-cell" colSpan="24">
+                      {(() => {
+                        // Debug: Log what we're trying to render
+                        const precipData = sourceData.hourly?.map(h => {
+                          if (!h) return null;
+                          // Handle nested precipitation object
+                          if (h.precipitation && typeof h.precipitation === 'object') {
+                            return h.precipitation.amount;
+                          }
+                          return h.precipitation;
+                        }) || [];
+                        console.log(`[DEBUG] Rendering precipitation for ${sourceData.source}:`, JSON.stringify({
+                          hasHourly: !!sourceData.hourly,
+                          hourCount: sourceData.hourly?.length || 0,
+                          precipitationArray: precipData,
+                          nonNullCount: precipData.filter(p => p !== null).length,
+                          hasAnyPrecip: precipData.some(p => p > 0),
+                          maxPrecip: Math.max(...precipData.filter(p => p !== null && p !== undefined)),
+                          hoursLength: sourceData.hourly?.length,
+                          isArray: Array.isArray(sourceData.hourly),
+                          firstHour: sourceData.hourly?.[0],
+                          firstHourPrecip: sourceData.hourly?.[0]?.precipitation
+                        }, null, 2));
+                        
+                        // Check if we have valid hours data
+                        if (!sourceData.hourly || !Array.isArray(sourceData.hourly) || sourceData.hourly.length < 24) {
+                          console.log(`[DEBUG] No valid hours data for ${sourceData.source}`);
+                          return <div className="precipitation-bar-container"><div className="no-data">—</div></div>;
+                        }
+                        
+                        // Check if precipitationVisualizer is available
+                        if (!window.precipitationVisualizer || !window.precipitationVisualizer.getPrecipitationColor) {
+                          return <div className="no-data">Loading...</div>;
+                        }
+                        
+                        // Render precipitation bars inline using JSX
+                        // PRECIPITATION BAR VISUALIZATION:
+                        // This section renders the precipitation bars as a segmented container
+                        // where each hour is represented by a separate DOM element.
+                        //
+                        // Key features:
+                        // - Each hour segment has its own background color based on precipitation amount
+                        // - Border radius is applied to create a continuous visual for consecutive rainy hours
+                        // - Tooltips show detailed precipitation information on hover
+                        // - Thunderstorm hours have a special yellow border
+                        return (
+                          <div className="precipitation-bar-container segmented" style={{
+                            display: 'flex',
+                            width: '100%',
+                            height: '20px',
+                            alignItems: 'center',
+                            position: 'relative',
+                            minWidth: '100%' /* Ensures the container spans full width */
+                          }}>
+                            {Array.from({ length: 24 }, (_, hourIndex) => {
+                              const hour = sourceData.hourly[hourIndex];
+                              
+                              // Handle missing hour data
+                              if (!hour) {
+                                return (
+                                  <div
+                                    key={`hour-segment-${hourIndex}`}
+                                    className="precipitation-hour-segment no-data"
+                                    data-hour={hourIndex}
+                                    style={{
+                                      backgroundColor: '#f0f0f0',
+                                      flex: '1',
+                                      height: '16px',
+                                      opacity: 0.3
+                                    }}
+                                    aria-label={`Hour ${hourIndex}: No data available`}
+                                  />
+                                );
+                              }
+                              
+                              // Extract precipitation data with proper null checks
+                              const precipAmount = hour.precipitation?.amount;
+                              const precipUnit = hour.precipitation?.unit || 'mm';
+                              const weatherCondition = hour.weatherCondition;
+                              
+                              // Convert to mm for consistent threshold checking
+                              let amountInMm = precipAmount;
+                              if (precipUnit === 'inches' && precipAmount !== null && precipAmount !== undefined) {
+                                amountInMm = precipAmount * 25.4; // Proper unit conversion ensures consistent visualization
+                              }
+                              const hasPrecipitation = precipAmount !== null && precipAmount !== undefined && amountInMm >= 0.1;
+                              
+                              // Get the background color for this hour based on precipitation amount
+                              // Make sure hours with no rain appear white/transparent instead of grey
+                              const backgroundColor = hasPrecipitation ?
+                                window.precipitationVisualizer.getPrecipitationColor(precipAmount, precipUnit) :
+                                'transparent';
+                              
+                              // Check for thunderstorms for special styling
+                              const hasThunderstorm = weatherCondition && weatherCondition.toLowerCase().includes('thunder');
+                              
+                              // Determine border radius based on neighboring hours
+                              // This creates a continuous visual effect for consecutive precipitation hours
+                              const prevHour = hourIndex > 0 ? sourceData.hourly[hourIndex - 1] : null;
+                              const nextHour = hourIndex < 23 ? sourceData.hourly[hourIndex + 1] : null;
+                              
+                              // Proper checking of previous hour precipitation with unit conversion
+                              let prevHasPrecip = false;
+                              if (prevHour?.precipitation?.amount !== null && prevHour?.precipitation?.amount !== undefined) {
+                                let prevAmountInMm = prevHour.precipitation.amount;
+                                if (prevHour.precipitation.unit === 'inches') {
+                                  prevAmountInMm = prevHour.precipitation.amount * 25.4;
+                                }
+                                prevHasPrecip = prevAmountInMm >= 0.1;
+                              }
+                              
+                              // Proper checking of next hour precipitation with unit conversion
+                              let nextHasPrecip = false;
+                              if (nextHour?.precipitation?.amount !== null && nextHour?.precipitation?.amount !== undefined) {
+                                let nextAmountInMm = nextHour.precipitation.amount;
+                                if (nextHour.precipitation.unit === 'inches') {
+                                  nextAmountInMm = nextHour.precipitation.amount * 25.4;
+                                }
+                                nextHasPrecip = nextAmountInMm >= 0.1;
+                              }
+                              
+                              // Apply border radius based on precipitation pattern
+                              let borderRadius = {};
+                              if (hasPrecipitation) {
+                                if (!prevHasPrecip && nextHasPrecip) {
+                                  // First hour with precipitation
+                                  borderRadius = {
+                                    borderTopLeftRadius: '8px',
+                                    borderBottomLeftRadius: '8px'
+                                  };
+                                } else if (prevHasPrecip && !nextHasPrecip) {
+                                  // Last hour with precipitation
+                                  borderRadius = {
+                                    borderTopRightRadius: '8px',
+                                    borderBottomRightRadius: '8px'
+                                  };
+                                } else if (!prevHasPrecip && !nextHasPrecip) {
+                                  // Isolated hour with precipitation
+                                  borderRadius = {
+                                    borderRadius: '8px'
+                                  };
+                                }
+                              }
+                              
+                              // Generate tooltip content with detailed precipitation information
+                              const tooltipContent = window.precipitationVisualizer.generatePrecipitationTooltip(hour, hourIndex);
+                              
+                              // Diagnostic logging for debugging precipitation rendering
+                              if (hourIndex === 20 || precipAmount > 0) {
+                                console.log(`[DIAGNOSTIC] Hour ${hourIndex} for ${sourceData.source}:`, {
+                                  precipAmount,
+                                  precipUnit,
+                                  backgroundColor,
+                                  hasPrecipitation,
+                                  hasThunderstorm
+                                });
+                              }
+                              
+                              // Properly structured hour segment with consistent styling and tooltip
+                              return (
+                                <div
+                                  key={`hour-segment-${hourIndex}`}
+                                  className="precipitation-hour-segment"
+                                  data-hour={hourIndex}
+                                  data-precipitation={precipAmount || 0}
+                                  data-has-precipitation={hasPrecipitation}
+                                  aria-label={`Hour ${hourIndex}: ${hasPrecipitation ? `${precipAmount?.toFixed(1) || '0.0'} ${precipUnit} precipitation` : 'No precipitation'}`}
+                                  title={tooltipContent} /* Use native title attribute for reliable tooltip display */
+                                  style={{
+                                    backgroundColor: backgroundColor,
+                                    flex: '1 1 auto', /* Ensures equal width distribution */
+                                    height: '20px',
+                                    border: hasThunderstorm ? '2px solid #ffcc00' : '1px solid rgba(0, 0, 0, 0.3)',
+                                    boxSizing: 'border-box',
+                                    minWidth: 'calc(100% / 24)', /* Ensures minimum width for each segment */
+                                    ...borderRadius
+                                  }}
+                                />
+                              );
+                            })}
+                          </div>
+                        );
+                      })()}
+                    </td>
+                  ) : (
+                    // Empty cell if no hourly data
+                    <td className="hourly-cell data-cell no-data-available" colSpan="24">
+                      <div className="no-data-message">No precipitation data available</div>
+                    </td>
+                  )}
+                </tr>
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      
+      {/* Precipitation Legend */}
+      <div className="hourly-legend precip-legend">
+        <h4>Precipitation Legend</h4>
+        <div className="legend-items">
+          <div className="legend-item">
+            <div className="legend-color precip-drizzle"></div>
+            <span>Drizzle (0.1-0.2mm)</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-color precip-light-rain"></div>
+            <span>Light Rain (0.3-2mm)</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-color precip-moderate-rain"></div>
+            <span>Moderate Rain (2-5mm)</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-color precip-heavy-rain"></div>
+            <span>Heavy Rain ({'>'}5mm)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+/**
+ * Renders the precipitation visualization for an hour
+ *
+ * This function creates a visualization element for a single hour's precipitation data.
+ * It handles different cases:
+ * - No data available
+ * - Zero precipitation
+ * - Various precipitation amounts with appropriate styling
+ *
+ * The visualization includes:
+ * - Color-coded background based on precipitation amount
+ * - Special styling for thunderstorms
+ * - Detailed tooltip on hover
+ *
+ * @param {Object} hour - Hour data object containing precipitation and weather condition
+ * @returns {JSX.Element} - Rendered visualization component with tooltip
+ */
+function renderPrecipitationVisualization(hour) {
+  // Generate tooltip content for EVERY cell, even if no data
+  // FIX: Ensure tooltip content is generated even for cells with no data
+  const tooltipContent = hour ?
+    window.precipitationVisualizer.generatePrecipitationTooltip(hour) :
+    'No data available';
+  
+  // Handle case where hour data or precipitation data is missing
+  if (!hour || !hour.precipitation) {
+    return (
+      <window.Tooltip content={tooltipContent} position="top">
+        <div className="no-precip-data">—</div>
+      </window.Tooltip>
+    );
+  }
+  
+  // Extract precipitation data with proper null checks
+  const precipAmount = hour.precipitation.amount;
+  const precipUnit = hour.precipitation.unit || 'mm';
+  
+  // Handle case where precipitation amount is null/undefined
+  // Still show tooltip even when precipitation data is missing
+  if (precipAmount === null || precipAmount === undefined) {
+    return (
+      <window.Tooltip content={tooltipContent} position="top">
+        <div className="no-precip-data">—</div>
+      </window.Tooltip>
+    );
+  }
+  
+  // Get weather condition if available
+  const weatherCondition = hour.weatherCondition || '';
+  
+  // Get visualization info based on precipitation amount and weather condition
+  // Pass the unit for proper threshold calculation
+  const visualInfo = window.precipitationVisualizer.getPrecipitationVisualization(
+    precipAmount,
+    weatherCondition,
+    precipUnit
+  );
+  
+  // For zero precipitation or no visualization, show completely blank cell
+  // Ensure consistent rendering for zero precipitation
+  if (!visualInfo.showVisualization) {
+    return (
+      <window.Tooltip content={tooltipContent} position="top">
+        <div className="precip-blank-cell">
+          {/* Completely blank - no text, only tooltip on hover */}
+        </div>
+      </window.Tooltip>
+    );
+  }
+  
+  // Render color-only visualization with tooltip - NO text display
+  // Use proper class names and ensure thunderstorm styling is applied
+  return (
+    <window.Tooltip content={tooltipContent} position="top">
+      <div
+        className={`precip-visualization ${visualInfo.className} ${visualInfo.hasThunderstorm ? 'has-thunderstorm' : ''}`}
+      >
+        {/* No text content - only color background and optional thunderstorm border */}
+      </div>
+    </window.Tooltip>
+  );
+}
+
+// Set display name for debugging
+HourlyComparisonGrid.displayName = 'HourlyComparisonGrid';
+
+// Export the component
+window.HourlyComparisonGrid = HourlyComparisonGrid;

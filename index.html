@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="description" content="Super Sky App - Compare weather forecasts from multiple sources for accurate precipitation predictions">
+  <meta name="theme-color" content="#3498db">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="application-name" content="Super Sky">
+  <meta name="msapplication-TileColor" content="#3498db">
+  <meta name="msapplication-config" content="icons/browserconfig.xml">
+  <meta property="og:title" content="Super Sky">
+  <meta property="og:description" content="Compare weather forecasts from multiple sources for the most accurate predictions">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="icons/icon-512x512.png">
+  <title>Super Sky</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+  
+  <!-- PWA Support -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16x16.png">
+  
+  <!-- React and ReactDOM -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- TypeScript -->
+  <script src="https://unpkg.com/typescript@4.9.5/lib/typescript.js"></script>
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles/design-system.css">
+  <link rel="stylesheet" href="styles/animations.css">
+  <link rel="stylesheet" href="styles/help.css">
+  <link rel="stylesheet" href="styles/skeleton.css">
+  <link rel="stylesheet" href="styles/tooltip.css">
+  <link rel="stylesheet" href="styles/main.css">
+<link rel="stylesheet" href="styles/header-legend.css">
+  <link rel="stylesheet" href="styles/hourly-grid.css">
+  <link rel="stylesheet" href="styles/precipitation-visualization.css">
+  <link rel="stylesheet" href="styles/precipitation-bar-chart.css">
+  <link rel="stylesheet" href="styles/service-indicators.css">
+  <link rel="stylesheet" href="styles/responsive.css">
+  <link rel="stylesheet" href="styles/onboarding.css">
+  <link rel="stylesheet" href="styles/precipitation-tooltip.css">
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="utils/helpers.js" as="script">
+  <link rel="preload" href="utils/cacheManager.js" as="script">
+  <link rel="preload" href="components/App.jsx" as="script">
+</head>
+<body>
+  <div id="root"></div>
+  
+  
+  <!-- Utility Scripts -->
+  <script type="text/babel" src="config/config.js"></script>
+  <script type="text/babel" src="utils/helpers.js"></script>
+  <script type="text/babel" src="utils/cacheManager.js"></script>
+  <script type="text/babel" src="utils/transformers.js"></script>
+  <script type="text/babel" src="utils/notificationManager.js"></script>
+  <script type="text/babel" src="utils/mockDataGenerator.js"></script>
+  <script type="text/babel" src="utils/serviceNameMapper.js"></script>
+  
+  <!-- Phase 5 Optimization and Testing Utilities -->
+  <script type="text/babel" src="utils/performanceOptimizer.js"></script>
+  <script type="text/babel" src="utils/accessibilityTester.js"></script>
+  
+  <script type="text/babel" src="services/weatherService.js"></script>
+  <script type="text/babel" src="hooks/useWeather.js"></script>
+  
+  <!-- App Scripts - Load components first -->
+  <!-- <script type="text/babel" src="components/Tooltip.jsx"></script> REMOVED in Phase 1 - tooltip cleanup -->
+  <!-- <script type="text/babel" src="components/PrecipitationTooltip.jsx"></script> DISABLED - file moved to .disabled -->
+  <!-- <script type="text/babel" src="components/ServiceTooltip.jsx"></script> -->
+  <script type="text/babel" src="components/SkeletonLoader.jsx"></script>
+  
+  <!-- Precipitation utilities - Load after Tooltip component -->
+  <script type="text/babel" src="utils/precipitationBarAnalyzer.js"></script>
+  <script type="text/babel" src="utils/precipitationVisualizer.js"></script>
+  <script type="text/babel" src="components/HelpSection.jsx"></script>
+  <script type="text/babel" src="components/HourlyComparisonGrid.jsx"></script>
+  <script type="text/babel" src="components/ComparisonView.jsx"></script>
+  <script type="text/babel" src="components/AppSettings.jsx"></script>
+  <script type="text/babel" src="components/UserOnboarding.jsx"></script>
+  <script type="text/babel" src="components/App.jsx"></script>
+  <script type="text/babel" src="index.jsx"></script>
+  
+  <!-- Debug Diagnosis Script -->
+  <script src="debug-diagnosis.js"></script>
+  
+  <!-- Debug Precipitation Bars Script -->
+  <script src="debug-precipitation-bars.js"></script>
+  
+  <!-- Test script for precipitation bars -->
+  <script src="test-precipitation-bars.js"></script>
+  
+  <!-- Direct weather test script -->
+  <script src="test-weather-direct.js"></script>
+  
+  <!-- Debug data structure script -->
+  <script src="debug-data-structure.js"></script>
+  
+  <!-- Debug color mismatch script -->
+  <script src="debug-color-mismatch.js"></script>
+  
+  <!-- Service Worker Registration -->
+  <script>
+    // Register service worker for PWA support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./serviceWorker.js')
+          .then(registration => {
+            console.log('Service Worker registered with scope:', registration.scope);
+            
+            // Setup background sync if available
+            if ('SyncManager' in window) {
+              // Request sync registration when online
+              navigator.serviceWorker.ready.then(registration => {
+                // Register for background sync
+                registration.periodicSync.register('sync-weather-data', {
+                  minInterval: 60 * 60 * 1000 // Once per hour
+                }).catch(error => {
+                  console.log('Periodic Sync could not be registered:', error);
+                });
+              });
+            }
+            
+            // Setup push notifications if available
+            if ('PushManager' in window) {
+              // We would request notification permission here in a real app
+              console.log('Push notifications are supported');
+            }
+          })
+          .catch(error => {
+            console.error('Service Worker registration failed:', error);
+          });
+      });
+      
+      // Listen for messages from service worker
+      navigator.serviceWorker.addEventListener('message', event => {
+        const data = event.data;
+        
+        if (data.type === 'SYNC_COMPLETED') {
+          console.log('Background sync completed for ZIP code:', data.zipCode);
+          // In a real app, we would update the UI here
+        }
+      });
+    }
+  </script>
+  
+  <!-- Initialize Performance Optimizations -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize performance optimizations
+      if (window.performanceOptimizer) {
+        window.performanceOptimizer.initPerformanceOptimizations();
+        console.log('Performance optimizations initialized');
+      }
+      
+      // Add accessibility testing shortcut (Alt+Shift+A)
+      document.addEventListener('keydown', (e) => {
+        if (e.altKey && e.shiftKey && e.key === 'A') {
+          if (window.accessibilityTester) {
+            const results = window.accessibilityTester.runAllTests();
+            console.log('Accessibility test results:', results);
+            
+            // Create a modal to display results
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            modal.style.zIndex = '9999';
+            modal.style.display = 'flex';
+            modal.style.justifyContent = 'center';
+            modal.style.alignItems = 'center';
+            
+            const content = document.createElement('div');
+            content.style.backgroundColor = '#fff';
+            content.style.padding = '20px';
+            content.style.borderRadius = '8px';
+            content.style.maxWidth = '800px';
+            content.style.maxHeight = '80vh';
+            content.style.overflow = 'auto';
+            
+            const closeButton = document.createElement('button');
+            closeButton.textContent = 'Close';
+            closeButton.style.marginTop = '20px';
+            closeButton.style.padding = '8px 16px';
+            closeButton.style.backgroundColor = '#e0e0e0';
+            closeButton.style.border = 'none';
+            closeButton.style.borderRadius = '4px';
+            closeButton.style.cursor = 'pointer';
+            closeButton.addEventListener('click', () => {
+              document.body.removeChild(modal);
+            });
+            
+            // Display results
+            const resultsContainer = document.createElement('div');
+            resultsContainer.id = 'a11y-results';
+            content.appendChild(resultsContainer);
+            content.appendChild(closeButton);
+            modal.appendChild(content);
+            
+            document.body.appendChild(modal);
+            
+            // Display results in the container
+            window.accessibilityTester.displayTestResults(results, 'a11y-results');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

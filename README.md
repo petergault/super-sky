@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Super Sky - Weather App
+
+A sophisticated weather application built with Next.js that displays forecasts from multiple weather services with a focus on precipitation visualization and comparison.
 
 ## Getting Started
 
@@ -18,7 +20,21 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Features
+
+- **Multi-Source Weather Data**: Compare forecasts from Azure Maps (AccuWeather), Open Meteo, Foreca, and Google Weather
+- **Precipitation Focus**: Detailed visualization of rain/snow probability and intensity
+- **Comparison View**: Side-by-side comparison of weather data from all sources
+- **Responsive Design**: Optimized for all device sizes (mobile, tablet, desktop)
+- **Modern Tech Stack**: Built with Next.js, React, and TypeScript
+
+## Tech Stack
+
+- **Next.js 15**: React framework with App Router
+- **React 19**: Latest React with improved features
+- **TypeScript**: Type safety and better development experience
+- **Tailwind CSS**: Utility-first CSS framework
+- **Axios**: HTTP client for API requests
 
 ## Learn More
 

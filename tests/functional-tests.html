@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Sky - Functional Tests</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/design-system.css">
+  <style>
+    /* Test runner specific styles */
+    .test-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .test-controls {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+    }
+    
+    .test-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    
+    .test-button {
+      padding: 8px 16px;
+      background-color: #e0e0e0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    
+    .test-button:hover {
+      background-color: #d0d0d0;
+    }
+    
+    .test-button.primary {
+      background-color: #4caf50;
+      color: white;
+    }
+    
+    .test-button.primary:hover {
+      background-color: #3e8e41;
+    }
+    
+    .test-summary {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .summary-stats {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+    
+    .stat {
+      text-align: center;
+      padding: 10px;
+    }
+    
+    .stat-value {
+      display: block;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .test-section {
+      margin-bottom: 30px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .test-section h3 {
+      margin: 0;
+      padding: 15px;
+      background-color: #f0f0f0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .test-scenarios {
+      padding: 0;
+    }
+    
+    .test-scenario {
+      margin: 0;
+      padding: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .test-scenario:last-child {
+      border-bottom: none;
+    }
+    
+    .test-scenario.running {
+      background-color: #f5f5f5;
+    }
+    
+    .test-scenario.passed {
+      background-color: #f1f8e9;
+    }
+    
+    .test-scenario.failed {
+      background-color: #fbe9e7;
+    }
+    
+    .test-scenario.error {
+      background-color: #ffebee;
+    }
+    
+    .scenario-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .scenario-name {
+      font-weight: bold;
+    }
+    
+    .scenario-status {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .passed .scenario-status {
+      background-color: #c8e6c9;
+      color: #2e7d32;
+    }
+    
+    .failed .scenario-status {
+      background-color: #ffccbc;
+      color: #d84315;
+    }
+    
+    .error .scenario-status {
+      background-color: #ffcdd2;
+      color: #c62828;
+    }
+    
+    .scenario-details {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.7);
+      border-radius: 4px;
+    }
+    
+    .result-details h4 {
+      margin: 10px 0 5px;
+    }
+    
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+    }
+    
+    .results-table th, .results-table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .results-table th {
+      background-color: #f5f5f5;
+      font-weight: 500;
+    }
+    
+    .pass {
+      color: #2e7d32;
+    }
+    
+    .fail {
+      color: #c62828;
+    }
+    
+    .warning {
+      color: #f57c00;
+      margin: 5px 0;
+    }
+    
+    .info {
+      color: #1976d2;
+      margin: 5px 0;
+    }
+    
+    .error-message {
+      color: #c62828;
+      padding: 10px;
+      background-color: #ffebee;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="header" role="banner">
+    <div class="container">
+      <h1>Super Sky - Functional Tests</h1>
+      <nav>
+        <a href="../index.html">Back to App</a>
+      </nav>
+    </div>
+  </header>
+  
+  <main class="main-content" role="main">
+    <div class="test-container">
+      <div class="card">
+        <h2>Phase 5: Testing and Optimization</h2>
+        <p>This page runs functional tests for the Super Sky app to verify that the application works correctly under various weather conditions and scenarios.</p>
+        
+        <div id="test-results-container">
+          <!-- Test results will be inserted here by the test runner -->
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <p>&copy; 2025 Super Sky</p>
+      <p>
+        <small>
+          Phase 5 Implementation: Testing and Optimization
+        </small>
+      </p>
+    </div>
+  </footer>
+  
+  <!-- Load app dependencies -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  
+  <!-- Load app utilities -->
+  <script src="../utils/helpers.js"></script>
+  <script src="../utils/cacheManager.js"></script>
+  <script src="../utils/transformers.js"></script>
+  <script src="../utils/precipitationVisualizer.js"></script>
+  <script src="../utils/notificationManager.js"></script>
+  <script src="../utils/mockDataGenerator.js"></script>
+  
+  <!-- Load app services -->
+  <script src="../services/weatherService.js"></script>
+  
+  <!-- Load app hooks -->
+  <script src="../hooks/useWeather.js"></script>
+  
+  <!-- Load test files -->
+  <script src="functional-test-scenarios.js"></script>
+  <script src="functional-test-runner.js"></script>
+  
+  <script>
+    // Initialize the test runner when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.functionalTestRunner) {
+        window.functionalTestRunner.init();
+      } else {
+        console.error('Test runner not loaded');
+        document.getElementById('test-results-container').innerHTML = 
+          '<div class="error-message">Error: Test runner not loaded. Please check the console for details.</div>';
+      }
+    });
+  </script>
+</body>
+</html>

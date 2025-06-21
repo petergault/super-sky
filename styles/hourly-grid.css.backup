@@ -1,0 +1,1169 @@
+/**
+ * Hourly Comparison Grid Styles
+ */
+
+.hourly-comparison-grid {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+
+
+.hourly-comparison-grid h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+
+
+/* Day selector styles */
+.day-selector {
+  display: flex;
+  overflow-x: visible;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+
+.day-button {
+  flex: 0 0 auto;
+  padding: 10px 15px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  /* NO transitions - removed all animations */
+  outline: none;
+}
+
+
+
+/* NO hover effects - removed all hover styling */
+.day-button:hover {
+  /* NO effects */
+}
+
+
+
+.day-button.active {
+  background-color: #007bff;
+  color: #000; /* Changed from white to black for better readability */
+  border: none;
+}
+
+
+
+.day-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+
+
+.day-date {
+  font-size: 0.8rem;
+  color: inherit;
+}
+
+
+
+/* Ensure day name and date are black in active button */
+.day-button.active .day-name,
+.day-button.active .day-date {
+  color: #000 !important; /* Force black text in active day button */
+}
+
+
+
+/* Day header styles */
+.day-header {
+  margin-bottom: 15px;
+  background-color: #f5f5f5;
+  padding: 12px 16px;
+  border-radius: 6px;
+}
+
+
+
+.day-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+
+
+.day-date-section {
+  flex: 1;
+  text-align: left;
+}
+
+
+
+.day-temp-section {
+  flex: 0 0 auto;
+  text-align: right;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+
+
+/* Day stats styles */
+.day-stats {
+  display: flex;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+
+
+.stat {
+  margin-right: 20px;
+}
+
+
+
+.stat-label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+
+
+.stat-value {
+  color: #333;
+}
+
+
+
+/* Hourly grid styles */
+.hourly-grid {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  border-collapse: collapse;
+  display: table;
+  margin-bottom: 20px;
+  table-layout: fixed; /* Fixed layout for consistent column distribution */
+  overflow: hidden; /* Prevent overflow */
+}
+
+
+
+/* Container for horizontal scroll - FIXED TO PREVENT OVERFLOW */
+.hourly-grid-container {
+  overflow-x: hidden;
+  overflow-y: visible;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+
+.hourly-row {
+  border: none;
+}
+
+
+
+.hourly-row.header-row {
+  background-color: transparent;
+  /* Add horizontal line below time header row for ruler effect */
+  border-bottom: 1px solid #ddd;
+}
+
+
+
+.hourly-row.precipitation-row {
+  height: 30px;
+  border: none;
+}
+
+
+
+.precipitation-row .source-cell {
+  background-color: transparent;
+}
+
+
+
+.hourly-cell {
+  padding: 4px 1px;
+  text-align: center;
+  min-width: 28px;
+  width: 28px;
+  font-size: 0.75rem;
+}
+
+
+
+/* Time cells in header should have fixed width */
+.time-cell {
+  max-width: 28px;
+}
+
+
+
+/* Ensure cells with precipitation bars have enough height */
+/*
+ * PRECIPITATION BAR CELL STYLING
+ *
+ * These styles are critical for the precipitation visualization fix:
+ * - Ensures the cell has proper height for the precipitation bars
+ * - Overrides fixed width constraints to allow the bars to span properly
+ * - Sets vertical alignment for consistent positioning
+ * - Forces table layout to fixed for proper column distribution
+ */
+.hourly-cell.bar-chart-cell {
+  min-height: 30px;
+  height: 30px;
+  padding: 2px 0;
+  vertical-align: middle;
+  /* Override the fixed width for precipitation bar cells */
+  min-width: auto !important;
+  max-width: none !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  table-layout: fixed !important;
+}
+
+
+
+/*
+ * PRECIPITATION CELL SPAN FIX
+ *
+ * This is a critical fix for the precipitation visualization:
+ * - Forces the cell with colspan="24" to properly span the entire table width
+ * - Ensures the cell maintains table-cell display for proper layout
+ * - Prevents overflow issues that were causing bars to be cut off
+ * - Sets consistent padding for proper vertical alignment
+ */
+.precipitation-row td[colspan="24"] {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: none !important;
+  padding: 2px 0 !important;
+  position: relative;
+  display: table-cell !important;
+  table-layout: fixed !important;
+  overflow: visible !important;
+}
+
+
+
+/*
+ * PRECIPITATION BAR CHART CONTAINER
+ *
+ * This ensures the bar chart container spans the full width:
+ * - Forces 100% width to fill the entire cell
+ * - Uses flex display for proper distribution of hour segments
+ * - Prevents wrapping to keep all segments in a single row
+ * - Maintains relative positioning for proper stacking context
+ */
+.precipitation-row .precipitation-bar-chart {
+  width: 100% !important;
+  position: relative !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+}
+
+
+
+/*
+ * PRECIPITATION HOUR SEGMENT DISTRIBUTION
+ *
+ * This is a critical fix for the hour segments:
+ * - Forces each segment to take an equal portion of the available width
+ * - Sets minimum width to prevent segments from collapsing
+ * - Uses flex-grow and flex-shrink for proper distribution
+ * - Ensures box-sizing includes borders in width calculations
+ */
+.precipitation-row .precipitation-hour-segment {
+  flex: 1 1 auto !important;
+  min-width: calc(100% / 24) !important;
+  width: calc(100% / 24) !important;
+  box-sizing: border-box !important;
+}
+
+
+
+/* Force the precipitation row to use proper table layout */
+.precipitation-row {
+  display: table-row !important;
+}
+
+
+
+/* Ensure the table respects colspan */
+.hourly-table tbody {
+  display: table-row-group !important;
+}
+
+
+
+.hourly-table tr {
+  display: table-row !important;
+}
+
+
+
+/* Override width constraints for cells with colspan */
+.hourly-cell[colspan] {
+  width: auto !important;
+  max-width: none !important;
+  min-width: auto !important;
+}
+
+
+
+/* Ensure the precipitation container uses full width */
+.precipitation-row .hour-data {
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+
+
+.precipitation-row .hour-precip {
+  width: 100% !important;
+}
+
+
+
+.source-cell {
+  position: sticky;
+  left: 0;
+  background-color: #fff;
+  z-index: 1;
+  text-align: left;
+  min-width: 120px;
+  width: 120px;
+  max-width: 120px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  padding-left: 8px; /* Add padding for better alignment */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+
+.header-row .source-cell {
+  background-color: transparent;
+}
+
+
+
+.time-cell {
+  font-size: 0.65rem;
+  color: #666;
+  line-height: 1.1;
+  padding: 2px 1px;
+  /* Add vertical grid marks for ruler effect */
+  border-right: 1px solid #e0e0e0;
+  position: relative;
+}
+
+
+
+/* Add tick marks below time cells for ruler effect */
+.time-cell::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 1px;
+  height: 8px;
+  background-color: #ddd;
+  z-index: 2;
+}
+
+
+
+/* Remove border from last time cell to avoid double border */
+.time-cell:last-child {
+  border-right: none;
+}
+
+
+
+.time-cell:last-child::after {
+  display: none;
+}
+
+</search>
+
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.hour-precip {
+  /* Remove text-specific styles that interfere with precipitation bars */
+  width: 100%;
+  height: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+
+
+/* Ensure precipitation-bar-chart class works properly */
+.precipitation-bar-chart {
+  width: 100% !important;
+  display: flex !important;
+  height: 20px;
+  position: relative;
+}
+
+
+
+/* Legacy text-based precipitation display */
+.hour-precip-text {
+  font-size: 0.7rem;
+  color: #333;
+}
+
+
+
+.no-data {
+  color: #ccc;
+}
+
+
+
+.no-data-available {
+  background-color: transparent;
+}
+
+
+
+.no-data-message {
+  padding: 10px;
+  color: #666;
+  font-style: italic;
+}
+
+
+
+.error-message {
+  color: #dc3545;
+}
+
+
+
+/* Service indicator styles */
+.service-cell-content {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+
+
+.service-indicator {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  margin-right: 6px;
+  flex-shrink: 0;
+  font-size: 0.7rem;
+}
+
+
+
+.service-indicator-accuweather {
+  background-color: #e74c3c;
+}
+
+
+
+.service-indicator-openmeteo {
+  background-color: #3498db;
+}
+
+
+
+.service-indicator-foreca {
+  background-color: #2ecc71;
+}
+
+
+
+.service-indicator-google {
+  background-color: #4285F4;
+}
+
+
+
+.service-name-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 110px;
+  color: #333 !important; /* Ensure service names are always dark for readability */
+  display: inline-block !important; /* Force display */
+  font-weight: 500; /* Medium weight for better visibility */
+}
+
+
+
+/* Bar Chart Cell Styles */
+.bar-chart-cell {
+  padding: 4px 8px !important;
+  position: relative;
+  height: 28px;
+  width: 100% !important;
+  display: table-cell !important;
+}
+
+
+
+.bar-chart-cell 
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+
+
+.bar-chart-cell .hour-precip {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+
+
+/*
+ * PRECIPITATION BAR CONTAINER WIDTH FIX
+ *
+ * This ensures the bar chart cell spans the full width:
+ * - Forces 100% width with no maximum constraints
+ * - Allows overflow to be visible to prevent cutting off tooltips
+ * - Forces table layout to fixed for consistent column widths
+ * - This was a critical fix for the precipitation visualization issue
+ */
+.precipitation-row .bar-chart-cell {
+  width: 100% !important;
+  max-width: none !important;
+  overflow: visible !important;
+  table-layout: fixed !important;
+}
+
+
+
+/*
+ * PRECIPITATION BAR CHART CELL COLSPAN FIX
+ *
+ * This specifically targets the cell with colspan="24" attribute:
+ * - Forces proper table-cell display mode
+ * - Ensures 100% width to span all columns
+ * - Maintains relative positioning for proper stacking
+ * - Allows overflow to be visible for tooltips
+ * - This was a key fix for the precipitation visualization issue
+ */
+.precipitation-row td.bar-chart-cell[colspan="24"] {
+  width: 100% !important;
+  display: table-cell !important;
+  position: relative;
+  overflow: visible;
+  table-layout: fixed !important;
+}
+
+
+
+/*
+ * PRECIPITATION BAR CHART CONTAINER WIDTH
+ *
+ * This ensures the bar chart container spans the full width:
+ * - Forces 100% width with minimum width constraint
+ * - Uses flex display for proper distribution of hour segments
+ * - Prevents wrapping to keep all segments in a single row
+ * - This was essential for fixing the precipitation visualization
+ */
+.precipitation-bar-chart {
+  width: 100% !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  min-width: 100% !important;
+}
+
+
+
+/*
+ * PRECIPITATION BAR CONTAINER
+ *
+ * This is the main container for the precipitation bars:
+ * - Forces exact 100% width with min/max constraints
+ * - Uses flex display with nowrap to keep segments in a row
+ * - Ensures all hour segments are visible and properly sized
+ * - This was a critical fix for the precipitation visualization
+ */
+.precipitation-bar-container {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+}
+
+
+
+/* Precipitation visualization styles (legacy - kept for compatibility) */
+.precip-visualization {
+  padding: 2px 3px;
+  border-radius: 2px;
+  font-size: 0.65rem;
+  display: inline-block;
+  line-height: 1.2;
+  min-height: 16px; /* Ensure consistent cell height even without text */
+  width: 100%;
+}
+
+
+
+/* Blank cell for zero precipitation - completely empty but maintains hover/tooltip */
+.precip-blank-cell {
+  padding: 2px 3px;
+  border-radius: 2px;
+  display: inline-block;
+  line-height: 1.2;
+  min-height: 16px; /* Same height as visualization cells */
+  width: 100%;
+  cursor: pointer; /* Show that it's interactive for tooltip */
+}
+
+
+
+.precip-drizzle {
+  background-color: rgba(173, 216, 230, 0.4);
+}
+
+
+
+.precip-light-rain {
+  background-color: rgba(135, 206, 250, 0.3);
+}
+
+
+
+.precip-moderate-rain {
+  background-color: rgba(30, 144, 255, 0.5);
+  color: white;
+}
+
+
+
+.precip-heavy-rain {
+  background-color: rgba(0, 0, 139, 0.7);
+  color: white;
+}
+
+
+
+.precip-extreme-rain {
+  background-color: rgba(75, 0, 130, 0.8);
+  color: white;
+}
+
+
+
+.weather-sunny {
+  background-color: rgba(255, 215, 0, 0.3);
+}
+
+
+
+.weather-cloudy {
+  background-color: rgba(169, 169, 169, 0.3);
+}
+
+
+
+.has-thunderstorm {
+  border: none;
+}
+
+
+
+.raindrop-icon {
+  width: 8px;
+  height: 12px;
+  background-color: #3498db;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  margin: 0 auto;
+}
+
+
+
+/* Legend styles */
+.hourly-legend {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: white !important;
+  border-radius: 4px;
+  border: none;
+}
+
+
+
+.hourly-legend h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: black !important;
+}
+
+
+
+.legend-items {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  margin-bottom: 5px;
+  color: black !important;
+}
+
+
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  border-radius: 3px;
+}
+
+
+
+/* Tooltip styles */
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.tooltip {
+  position: absolute;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+
+
+.tooltip-top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-5px);
+  margin-bottom: 5px;
+}
+
+
+
+.tooltip-bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  margin-top: 5px;
+}
+
+
+
+/* NO animations - removed all keyframes and animations */
+
+.loading .hourly-cell {
+  /* NO animations - removed pulse animation */
+  background-color: #f0f0f0;
+}
+
+
+
+/* Limited data message styles */
+.limited-data-notice {
+  background-color: #fff3cd;
+}
+
+
+
+.limited-data-message {
+  padding: 10px;
+  color: #856404;
+  text-align: center;
+}
+
+
+
+.limited-data-message strong {
+  font-weight: bold;
+}
+
+
+
+.limited-data-message small {
+  display: block;
+  margin-top: 5px;
+  color: #6c757d;
+}
+
+
+
+/* Fixed-size table - removed responsive behavior for table layout */
+/* Only keep responsive styles for non-table elements */
+@media (max-width: 768px) {
+  .hourly-comparison-grid {
+    padding: 15px;
+  }
+
+
+  
+  .legend-items {
+    flex-direction: column;
+  }
+
+
+  
+  .legend-item {
+    margin-bottom: 8px;
+  }
+
+
+}
+
+
+/* Mobile responsive fixes for horizontal overflow */
+@media (max-width: 768px) {
+  .source-cell {
+    min-width: 80px;
+    width: 80px;
+    max-width: 80px;
+    font-size: 0.7rem;
+  }
+
+
+  
+  .hourly-cell {
+    min-width: 20px;
+    width: 20px;
+    font-size: 0.65rem;
+    padding: 2px 0;
+  }
+
+
+  
+  .time-cell {
+    max-width: 20px;
+    font-size: 0.6rem;
+  }
+
+
+  
+  .service-name-text {
+    max-width: 60px;
+    font-size: 0.65rem;
+  }
+
+
+}
+
+
+
+@media (max-width: 576px) {
+  .source-cell {
+    min-width: 60px;
+    width: 60px;
+    max-width: 60px;
+    font-size: 0.65rem;
+    padding-left: 4px;
+  }
+
+
+  
+  .hourly-cell {
+    min-width: 18px;
+    width: 18px;
+    font-size: 0.6rem;
+    padding: 1px 0;
+  }
+
+
+  
+  .time-cell {
+    max-width: 18px;
+    font-size: 0.55rem;
+  }
+
+
+  
+  .service-name-text {
+    max-width: 50px;
+    font-size: 0.6rem;
+  }
+
+
+  
+  .service-indicator {
+    width: 16px;
+    height: 16px;
+    font-size: 0.6rem;
+  }
+
+
+/* Multi-Day Vertical Layout Styles */
+.multi-day-layout {
+  /* Remove the single-day constraints and allow vertical scrolling */
+}
+
+
+
+.multi-day-layout h2 {
+  margin-bottom: 30px;
+  font-size: 1.6rem;
+  color: #333;
+  text-align: center;
+}
+
+
+
+/* Container for all day sections */
+.days-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* Space between day sections */
+}
+
+
+
+/* Individual day section */
+.day-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; /* Additional margin for better separation */
+}
+
+
+
+/* Day header with temperature and date */
+.day-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+
+
+.day-title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  text-align: left;
+  padding: 10px 0;
+}
+
+
+
+/* Remove day selector styles since we no longer use them */
+.day-selector {
+  display: none !important; /* Hide day selector completely */
+}
+
+
+
+.day-button {
+  display: none !important; /* Hide day buttons completely */
+}
+
+
+
+/* Remove day stats styles since they're now in the day header */
+.day-stats {
+  display: none !important; /* Hide day stats section */
+}
+
+
+
+/* Adjust hourly grid container for multi-day layout */
+.day-section .hourly-grid-container {
+  overflow-x: hidden;
+  overflow-y: visible;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 0; /* Remove bottom margin within day sections */
+}
+
+
+
+/* Adjust hourly grid for day sections */
+.day-section .hourly-grid {
+  margin-bottom: 0; /* Remove bottom margin within day sections */
+}
+
+
+
+/* Ensure proper spacing in multi-day layout */
+.multi-day-layout .hourly-legend {
+  margin-top: 40px; /* More space above legend in multi-day layout */
+  position: sticky;
+  bottom: 20px;
+  z-index: 10;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Mobile responsive adjustments for multi-day layout */
+@media (max-width: 768px) {
+  .days-container {
+    gap: 30px; /* Reduce gap on mobile */
+  }
+
+
+  
+  .day-section {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+
+  
+  .day-title {
+    font-size: 1.1rem;
+  }
+
+
+  
+  .multi-day-layout h2 {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+  }
+
+
+  
+  .multi-day-layout .hourly-legend {
+    margin-top: 30px;
+  }
+
+
+}
+
+
+
+@media (max-width: 576px) {
+  .days-container {
+    gap: 25px; /* Further reduce gap on small mobile */
+  }
+
+
+  
+  .day-section {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+
+  
+  .day-title {
+    font-size: 1rem;
+  }
+
+
+  
+  .multi-day-layout h2 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+
+
+}
+
+
+
+/* Smooth scrolling for the entire multi-day layout */
+.multi-day-layout {
+  scroll-behavior: smooth;
+}
+
+
+
+/* Ensure day sections have proper visual hierarchy */
+.day-section:first-child {
+  border-color: #007bff; /* Highlight first day (today) */
+  border-width: 2px;
+}
+
+
+
+.day-section:first-child .day-title {
+  color: #007bff; /* Highlight today's title */
+}
+
+
+
+/* Add subtle animation for day sections loading */
+.day-section {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+
+
+/* Loading state for day sections */
+.day-section.loading {
+  opacity: 0.7;
+  transform: translateY(10px);
+}
+
+
+}
+

@@ -1,0 +1,322 @@
+/**
+ * Precipitation Bar Chart Styles
+ *
+ * NO animations, NO transitions, NO hover effects - seamless bars only
+ */
+
+/*
+ * BAR CHART CONTAINER
+ *
+ * Main container for precipitation bar visualization - NO container styling
+ */
+.precipitation-bar-container {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  min-width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  table-layout: fixed;
+}
+
+/*
+ * SEGMENTED CONTAINER STYLES
+ *
+ * NO container styling - bars should be seamless
+ */
+.precipitation-bar-container.segmented {
+  display: flex;
+  gap: 0;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  flex-wrap: nowrap;
+  /* NO borders, NO backgrounds, NO padding */
+}
+
+/*
+ * INDIVIDUAL HOUR SEGMENT
+ *
+ * NO animations, NO transitions, NO hover effects
+ */
+.precipitation-hour-segment {
+  height: 20px;
+  flex: 1 1 auto;
+  /* NO transitions - removed all animations */
+  cursor: pointer;
+  position: relative;
+  min-width: calc(100% / 24);
+  width: calc(100% / 24);
+  box-shadow: none;
+  border: none;
+}
+
+/*
+ * NO-DATA SEGMENT STYLING
+ */
+.precipitation-hour-segment.no-data {
+  background-color: transparent !important;
+  opacity: 1 !important;
+}
+
+/*
+ * NO HOVER EFFECTS - removed all hover styling
+ */
+.precipitation-hour-segment:hover {
+  /* NO effects - completely removed */
+}
+
+/*
+ * SEGMENT SPACING FIX
+ */
+.precipitation-hour-segment + .precipitation-hour-segment {
+  margin-left: 0;
+}
+
+/* Dark mode adjustments for segment colors */
+@media (prefers-color-scheme: dark) {
+  .precipitation-hour-segment {
+    /* Darker colors will be applied inline based on precipitation amount */
+  }
+  
+  .precipitation-hour-segment[style*="background-color: #e0f0d0"] {
+    background-color: #b0d0a0 !important;
+  }
+  
+  .precipitation-hour-segment[style*="background-color: #5fb8e0"] {
+    background-color: #4a8c8e !important;
+  }
+  
+  .precipitation-hour-segment[style*="background-color: #3a6ea8"] {
+    background-color: #2a5078 !important;
+  }
+  
+  .precipitation-hour-segment[style*="background-color: #800080"] {
+    background-color: #4b0082 !important;
+  }
+}
+
+/* Hour Grid Overlay for Bar Positioning */
+.hour-grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hour-grid-cell {
+  border: none;
+}
+
+.hour-grid-cell:last-child {
+  border-right: none;
+}
+
+/* Bar Width Calculations */
+.bar-width-1 { width: calc(100% / 24 * 1); }
+.bar-width-2 { width: calc(100% / 24 * 2); }
+.bar-width-3 { width: calc(100% / 24 * 3); }
+.bar-width-4 { width: calc(100% / 24 * 4); }
+.bar-width-5 { width: calc(100% / 24 * 5); }
+.bar-width-6 { width: calc(100% / 24 * 6); }
+.bar-width-7 { width: calc(100% / 24 * 7); }
+.bar-width-8 { width: calc(100% / 24 * 8); }
+.bar-width-9 { width: calc(100% / 24 * 9); }
+.bar-width-10 { width: calc(100% / 24 * 10); }
+.bar-width-11 { width: calc(100% / 24 * 11); }
+.bar-width-12 { width: calc(100% / 24 * 12); }
+.bar-width-13 { width: calc(100% / 24 * 13); }
+.bar-width-14 { width: calc(100% / 24 * 14); }
+.bar-width-15 { width: calc(100% / 24 * 15); }
+.bar-width-16 { width: calc(100% / 24 * 16); }
+.bar-width-17 { width: calc(100% / 24 * 17); }
+.bar-width-18 { width: calc(100% / 24 * 18); }
+.bar-width-19 { width: calc(100% / 24 * 19); }
+.bar-width-20 { width: calc(100% / 24 * 20); }
+.bar-width-21 { width: calc(100% / 24 * 21); }
+.bar-width-22 { width: calc(100% / 24 * 22); }
+.bar-width-23 { width: calc(100% / 24 * 23); }
+.bar-width-24 { width: calc(100% / 24 * 24); }
+
+/* Bar Position Calculations */
+.bar-start-0 { left: calc(100% / 24 * 0); }
+.bar-start-1 { left: calc(100% / 24 * 1); }
+.bar-start-2 { left: calc(100% / 24 * 2); }
+.bar-start-3 { left: calc(100% / 24 * 3); }
+.bar-start-4 { left: calc(100% / 24 * 4); }
+.bar-start-5 { left: calc(100% / 24 * 5); }
+.bar-start-6 { left: calc(100% / 24 * 6); }
+.bar-start-7 { left: calc(100% / 24 * 7); }
+.bar-start-8 { left: calc(100% / 24 * 8); }
+.bar-start-9 { left: calc(100% / 24 * 9); }
+.bar-start-10 { left: calc(100% / 24 * 10); }
+.bar-start-11 { left: calc(100% / 24 * 11); }
+.bar-start-12 { left: calc(100% / 24 * 12); }
+.bar-start-13 { left: calc(100% / 24 * 13); }
+.bar-start-14 { left: calc(100% / 24 * 14); }
+.bar-start-15 { left: calc(100% / 24 * 15); }
+.bar-start-16 { left: calc(100% / 24 * 16); }
+.bar-start-17 { left: calc(100% / 24 * 17); }
+.bar-start-18 { left: calc(100% / 24 * 18); }
+.bar-start-19 { left: calc(100% / 24 * 19); }
+.bar-start-20 { left: calc(100% / 24 * 20); }
+.bar-start-21 { left: calc(100% / 24 * 21); }
+.bar-start-22 { left: calc(100% / 24 * 22); }
+.bar-start-23 { left: calc(100% / 24 * 23); }
+
+/*
+ * HOUR TOOLTIP OVERLAY
+ *
+ * NO hover effects - removed all hover styling
+ */
+.hour-tooltip-overlay {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  cursor: pointer;
+  z-index: 10;
+  background: transparent;
+  pointer-events: auto;
+}
+
+/* NO hover effects - removed all hover styling */
+.hour-tooltip-overlay:hover {
+  /* NO effects */
+}
+
+/* Dark mode - NO hover effects */
+@media (prefers-color-scheme: dark) {
+  .hour-tooltip-overlay:hover {
+    /* NO effects */
+  }
+}
+
+/*
+ * TOOLTIP HEADER STYLES
+ */
+.tooltip-header {
+  font-weight: bold;
+  font-size: 0.9em;
+  color: var(--color-primary);
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border: 0 !important;
+  text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tooltip-header {
+    color: var(--color-primary-light);
+    border: 0 !important;
+  }
+}
+
+/* Legacy bar-hour-tooltip styles (kept for compatibility) */
+.bar-hour-tooltip {
+  position: absolute;
+  width: calc(100% / var(--bar-width));
+  height: 100%;
+  cursor: pointer;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  
+  
+  .hour-grid-cell {
+    border: none;
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .precipitation-hour-segment {
+    height: 14px;
+  }
+  
+  .precipitation-bar-container {
+    height: 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .precipitation-hour-segment {
+    height: 12px;
+  }
+  
+  .precipitation-bar-container {
+    height: 16px;
+  }
+  
+  /* Smaller border radius on mobile */
+  .precipitation-hour-segment[style*="border-radius: 8px"] {
+    border-radius: 6px !important;
+  }
+  
+  .precipitation-hour-segment[style*="border-top-left-radius: 8px"] {
+    border-top-left-radius: 6px !important;
+  }
+  
+  .precipitation-hour-segment[style*="border-bottom-left-radius: 8px"] {
+    border-bottom-left-radius: 6px !important;
+  }
+  
+  .precipitation-hour-segment[style*="border-top-right-radius: 8px"] {
+    border-top-right-radius: 6px !important;
+  }
+  
+  .precipitation-hour-segment[style*="border-bottom-right-radius: 8px"] {
+    border-bottom-right-radius: 6px !important;
+  }
+}
+
+/* NO animations - removed all keyframes and animations */
+
+/* NO loading animations - removed all loading effects */
+
+/* Ensure tooltips work properly with segments */
+.precipitation-hour-segment .tooltip-trigger {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* CRITICAL: ELIMINATE ALL BORDERS - ZERO BORDERS EVERYWHERE */
+.precipitation-hour-segment,
+.precipitation-bar-container,
+.precipitation-bar-container.segmented,
+.precipitation-bar-chart,
+.hour-grid-cell,
+.hour-grid-overlay,
+.hourly-cell,
+.hourly-row,
+.precipitation-row,
+.bar-chart-cell,
+.precip-visualization,
+.precip-blank-cell,
+td[colspan="24"],
+.comparison-grid,
+.comparison-row,
+.comparison-cell,
+.comparison-header {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+/* FORCE ZERO BORDERS ON ALL PRECIPITATION ELEMENTS */
+* [class*="precipitation"],
+* [class*="precip"],
+* [class*="hour-grid"],
+* [class*="hourly"],
+* [class*="bar-chart"] {
+  border: 0 !important;
+  outline: 0 !important;
+}
