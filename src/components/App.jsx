@@ -3,9 +3,6 @@ import { useWeather } from '../hooks/useWeather';
 import ZipCodeInput from './ZipCodeInput';
 import WeatherDisplay from './WeatherDisplay';
 import ComparisonView from './ComparisonView';
-import AppSettings from './AppSettings';
-import HelpSection from './HelpSection';
-import UserOnboarding from './UserOnboarding';
 
 /**
  * Main App Component
@@ -25,9 +22,6 @@ const App = () => {
   
   // State to track if we're showing comparison view
   const [showComparison, setShowComparison] = useState(false);
-  
-  // State to track onboarding completion
-  const [onboardingComplete, setOnboardingComplete] = useState(false);
   
   // Check if we're in demo mode
   const [isDemoMode, setIsDemoMode] = useState(false);
@@ -68,18 +62,6 @@ const App = () => {
   const handleRefresh = useCallback(() => {
     refreshData();
   }, [refreshData]);
-  
-  // Handle onboarding completion
-  const handleOnboardingComplete = useCallback(() => {
-    setOnboardingComplete(true);
-    localStorage.setItem('onboardingComplete', 'true');
-  }, []);
-
-  // Check if onboarding was previously completed
-  useEffect(() => {
-    const completed = localStorage.getItem('onboardingComplete') === 'true';
-    setOnboardingComplete(completed);
-  }, []);
 
   return (
     <div className="app-container">
@@ -142,22 +124,6 @@ const App = () => {
                   isLoading={isLoading}
                   error={error}
                 />
-              )}
-              
-              {/* Settings and Help Container for responsive layout */}
-              <div className="settings-help-container">
-                {/* App Settings Component */}
-                <div id="app-settings">
-                  <AppSettings zipCode={zipCode} />
-                </div>
-                
-                {/* Help Section Component */}
-                <HelpSection />
-              </div>
-              
-              {/* User Onboarding Component */}
-              {!onboardingComplete && (
-                <UserOnboarding onComplete={handleOnboardingComplete} />
               )}
             </div>
           </div>

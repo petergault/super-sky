@@ -8,6 +8,10 @@ const nextConfig = {
     // Disable TypeScript errors during builds for deployment
     ignoreBuildErrors: true,
   },
+  experimental: {
+    // Force all pages to be dynamic
+    forceSwcTransforms: true,
+  },
 }
 
 module.exports = nextConfig
