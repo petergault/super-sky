@@ -109,13 +109,16 @@ export function useWeather() {
 
   // Load recent ZIP codes on mount
   useEffect(() => {
-    setRecentZipCodes(getRecentZipCodes());
-    
-    // Load ZIP code from URL
-    const urlZip = getZipCodeFromUrl();
-    if (urlZip) {
-      setZipCode(urlZip);
-      fetchWeatherData(urlZip);
+    // Only run on client side
+    if (typeof window !== 'undefined') {
+      setRecentZipCodes(getRecentZipCodes());
+      
+      // Load ZIP code from URL
+      const urlZip = getZipCodeFromUrl();
+      if (urlZip) {
+        setZipCode(urlZip);
+        fetchWeatherData(urlZip);
+      }
     }
   }, []);
 

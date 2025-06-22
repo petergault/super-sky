@@ -1,6 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+
+// Force dynamic rendering to avoid SSR issues
+export const dynamic = 'force-dynamic';
 import { useWeather } from '../hooks/useWeather';
 import ZipCodeInput from '../components/ZipCodeInput';
 import WeatherDisplay from '../components/WeatherDisplay';
