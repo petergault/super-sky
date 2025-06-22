@@ -1,7 +1,13 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { debounce, isValidZipCode } from '../utils/helpers';
+import { debounce } from '../utils/helpers';
+
+// Temporary inline function to avoid import issues
+const isValidZipCode = (zipCode: string): boolean => {
+  const zipRegex = /^\d{5}(-\d{4})?$/;
+  return zipRegex.test(zipCode);
+};
 
 interface ZipCodeInputProps {
   onSubmit: (zipCode: string) => void;
@@ -20,144 +26,103 @@ const ZipCodeInput: React.FC<ZipCodeInputProps> = ({
   recentZipCodes = [],
   placeholder = "Enter ZIP code (e.g., 12345)"
 }) => {
-  const [inputValue, setInputValue] = useState('');
-  const [isValid, setIsValid] = useState(true);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [isValid, setIsValid] = useState<boolean>(true);
 
   // Debounced validation function
   const debouncedValidation = useCallback(
     debounce((value: string) => {
-      if (value.trim() === '') {
-        setIsValid(true);
-        return;
+      if (value.trim()) {
+        setIsValid(isValidZipCode(value.trim()));
+      } else {
+        setIsValid(true); // Empty input is considered valid
       }
-      setIsValid(isValidZipCode(value.trim()));
     }, 300),
     []
   );
 
+  // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
     debouncedValidation(value);
   };
 
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const trimmed = inputValue.trim();
     
-    if (!trimmed) {
+    const trimmedValue = inputValue.trim();
+    
+    if (!trimmedValue) {
       setIsValid(false);
       return;
     }
     
-    if (!isValidZipCode(trimmed)) {
+    if (!isValidZipCode(trimmedValue)) {
       setIsValid(false);
       return;
     }
     
-    setShowDropdown(false);
-    onSubmit(trimmed);
+    onSubmit(trimmedValue);
   };
 
-  const handleRecentZipClick = (zipCode: string) => {
+  // Handle recent ZIP code selection
+  const handleRecentSelect = (zipCode: string) => {
     setInputValue(zipCode);
     setIsValid(true);
-    setShowDropdown(false);
     onSubmit(zipCode);
   };
 
-  const handleInputFocus = () => {
-    if (recentZipCodes.length > 0) {
-      setShowDropdown(true);
-    }
-  };
-
-  const handleInputBlur = () => {
-    // Delay hiding dropdown to allow click events on dropdown items
-    setTimeout(() => setShowDropdown(false), 150);
-  };
-
   return (
-    <div className="relative w-full max-w-md mx-auto">
-      <form onSubmit={handleSubmit} className="flex gap-2">
-        <div className="relative flex-1">
+    <div className="zip-code-input">
+      <form onSubmit={handleSubmit} className="zip-form">
+        <div className="input-group">
           <input
             type="text"
             value={inputValue}
             onChange={handleInputChange}
-            onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
             placeholder={placeholder}
+            className={`zip-input ${!isValid ? 'invalid' : ''}`}
             disabled={isLoading}
-            className={`
-              w-full px-4 py-2 text-base border rounded-lg
-              focus:outline-none focus:ring-2 focus:ring-blue-500
-              disabled:opacity-50 disabled:cursor-not-allowed
-              ${!isValid 
-                ? 'border-red-500 bg-red-50 focus:ring-red-500' 
-                : 'border-gray-300 bg-white'
-              }
-            `}
-            aria-label="ZIP code input"
-            aria-invalid={!isValid}
-            aria-describedby={!isValid ? "zip-error" : undefined}
+            maxLength={10}
+            pattern="[0-9]{5}(-[0-9]{4})?"
+            title="Enter a valid ZIP code (e.g., 12345 or 12345-6789)"
           />
-          
-          {!isValid && (
-            <div 
-              id="zip-error" 
-              className="absolute top-full left-0 mt-1 text-sm text-red-600"
-              role="alert"
-            >
-              Please enter a valid ZIP code (e.g., 12345 or 12345-6789)
-            </div>
-          )}
-
-          {/* Recent ZIP codes dropdown */}
-          {showDropdown && recentZipCodes.length > 0 && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-              <div className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
-                Recent Searches
-              </div>
-              {recentZipCodes.map((zipCode, index) => (
-                <button
-                  key={`${zipCode}-${index}`}
-                  type="button"
-                  onClick={() => handleRecentZipClick(zipCode)}
-                  className="w-full px-3 py-2 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none"
-                >
-                  {zipCode}
-                </button>
-              ))}
-            </div>
-          )}
+          <button 
+            type="submit" 
+            className="submit-button"
+            disabled={isLoading || !inputValue.trim()}
+          >
+            {isLoading ? 'Loading...' : 'Get Weather'}
+          </button>
         </div>
         
-        <button
-          type="submit"
-          disabled={isLoading || !inputValue.trim() || !isValid}
-          className={`
-            px-6 py-2 text-white font-medium rounded-lg
-            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-            disabled:opacity-50 disabled:cursor-not-allowed
-            ${isLoading 
-              ? 'bg-blue-400 cursor-wait' 
-              : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'
-            }
-          `}
-          aria-label={isLoading ? "Loading weather data" : "Get weather"}
-        >
-          {isLoading ? (
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              <span>Loading...</span>
-            </div>
-          ) : (
-            'Get Weather'
-          )}
-        </button>
+        {!isValid && (
+          <div className="error-message">
+            Please enter a valid ZIP code (e.g., 12345 or 12345-6789)
+          </div>
+        )}
       </form>
+
+      {/* Recent ZIP codes */}
+      {recentZipCodes.length > 0 && (
+        <div className="recent-searches">
+          <h4>Recent Searches</h4>
+          <div className="recent-buttons">
+            {recentZipCodes.map((zipCode) => (
+              <button
+                key={zipCode}
+                onClick={() => handleRecentSelect(zipCode)}
+                className="recent-button"
+                disabled={isLoading}
+              >
+                {zipCode}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

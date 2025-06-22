@@ -9,190 +9,190 @@ import {
   formatProbability, 
   formatDate, 
   formatTime, 
-  formatTimeAgo,
-  formatPressure,
-  formatVisibility 
+  formatTimeAgo
+  // formatPressure,
+  // formatVisibility 
 } from '../utils/helpers';
+
+// Temporary inline functions to avoid import issues
+const formatPressure = (pressure: number | undefined | null, unit = 'inHg'): string => {
+  if (pressure === undefined || pressure === null) return 'N/A';
+  const value = Math.round(pressure * 100) / 100;
+  return `${value} ${unit}`;
+};
+
+const formatVisibility = (visibility: number | undefined | null, unit = 'mi'): string => {
+  if (visibility === undefined || visibility === null) return 'N/A';
+  const value = Math.round(visibility * 10) / 10;
+  return `${value} ${unit}`;
+};
 
 interface WeatherDisplayProps {
   zipCode: string;
   weatherData: WeatherData | null;
   isLoading: boolean;
   error: string | null;
-  showComparison?: boolean; // For comparison mode toggle
-  comparisonData?: any; // For comparison mode
+  onZipCodeChange?: (zipCode: string) => void;
+  onRefresh?: () => void;
+  showComparison?: boolean;
+  onComparisonToggle?: () => void;
+  comparisonData?: any;
   isLoadingComparison?: boolean;
   comparisonError?: string | null;
 }
 
 /**
- * SkeletonLoader Component for loading states
+ * WeatherDisplay Component
+ * Displays weather information and handles comparison view
  */
-const SkeletonLoader: React.FC<{ type?: string }> = ({ type = "weather" }) => {
-  return (
-    <div className="bg-white rounded-lg shadow-md p-6 animate-pulse">
-      <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-      <div className="space-y-3">
-        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-        <div className="h-4 bg-gray-200 rounded w-full"></div>
-        <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-      </div>
-    </div>
-  );
-};
-
-/**
- * WeatherDisplay Component - Displays weather information for a location
- */
-const WeatherDisplay: React.FC<WeatherDisplayProps> = React.memo(({ 
-  zipCode, 
-  weatherData, 
-  isLoading, 
+const WeatherDisplay: React.FC<WeatherDisplayProps> = ({
+  weatherData,
+  isLoading,
   error,
+  onRefresh,
   showComparison = false,
+  onComparisonToggle,
+  // Destructure but don't use these props to avoid unused variable errors
+  zipCode,
+  onZipCodeChange,
   comparisonData,
   isLoadingComparison,
-  comparisonError
+  comparisonError,
 }) => {
+  // Early returns for loading and error states
   if (isLoading) {
-    return <SkeletonLoader type="weather" />;
-  }
-  
-  if (error) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6" role="region" aria-label="Weather information error">
-        <div className="text-center" role="alert">
-          <div className="text-red-600 text-xl font-semibold mb-2">Error</div>
-          <p className="text-gray-700 mb-2">{error}</p>
-          <p className="text-gray-600 text-sm">Please try again or check your internet connection.</p>
-        </div>
-      </div>
-    );
-  }
-  
-  if (!weatherData) {
-    return (
-      <div className="bg-white rounded-lg shadow-md p-6" role="region" aria-label="Weather information placeholder">
-        <div className="text-center text-gray-500">
-          <p>Enter a ZIP code to see weather information</p>
-        </div>
+      <div className="weather-loading">
+        <div className="loading-spinner"></div>
+        <p>Loading weather data...</p>
       </div>
     );
   }
 
-  // Handle both single weather data and comparison data
-  const isComparisonData = 'services' in weatherData;
-  
-  // If we're in comparison mode and have comparison data, show the comparison view
-  if (showComparison && isComparisonData) {
+  if (error) {
     return (
-      <ComparisonView
-        weatherData={(weatherData as any).services || {}}
-        isLoading={isLoading}
-        error={error}
+      <div className="weather-error">
+        <h3>Error</h3>
+        <p>{error}</p>
+        {onRefresh && (
+          <button onClick={onRefresh} className="retry-button">
+            Try Again
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  if (!weatherData) {
+    return (
+      <div className="weather-empty">
+        <p>Enter a ZIP code to get weather information</p>
+      </div>
+    );
+  }
+
+  // Handle different data structures (single vs comparison)
+  const isComparison = Array.isArray(weatherData) || (weatherData && typeof weatherData === 'object' && 'services' in weatherData);
+
+  if (isComparison) {
+    return (
+      <ComparisonView 
+        data={weatherData as any}
+        onToggleView={onComparisonToggle}
+        showComparison={showComparison}
       />
     );
   }
-  
-  // For single view, get the current weather data
-  const currentWeather = isComparisonData 
-    ? (weatherData as any).services?.azure 
-    : weatherData;
 
-  if (!currentWeather) {
-    return (
-      <div className="bg-white rounded-lg shadow-md p-6" role="region" aria-label="Weather information error">
-        <div className="text-center" role="alert">
-          <div className="text-red-600 text-xl font-semibold mb-2">No Data Available</div>
-          <p className="text-gray-700">Weather data is not available at this time.</p>
-        </div>
-      </div>
-    );
-  }
-  
-  // Display weather information with cache status
+  // Single service weather display
+  const { service, location, current, forecast, hourly, cached, timestamp } = weatherData;
+
   return (
-    <div className="bg-white rounded-lg shadow-md p-6" role="region" aria-label={`Weather information for ${currentWeather.location.city}`}>
-      <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
-          Weather for {currentWeather.location.city}, {currentWeather.location.state} ({currentWeather.location.zipCode})
-        </h2>
-        
-        <div className="space-y-6">
-          {/* Current Weather Section */}
-          <div className="border-b border-gray-200 pb-4">
-            <h3 className="text-lg font-semibold text-gray-700 mb-3">Current Conditions</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <div className="text-4xl font-bold text-blue-600">
-                  {formatTemperature(currentWeather.current.temperature)}
-                </div>
-                <div className="text-lg text-gray-600 capitalize">
-                  {currentWeather.current.description}
-                </div>
-                <div className="text-sm text-gray-500">
-                  Feels like: {formatTemperature(currentWeather.current.feelsLike)}
-                </div>
-              </div>
-              
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Humidity:</span>
-                  <span className="font-medium">{currentWeather.current.humidity}%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Wind:</span>
-                  <span className="font-medium">
-                    {formatWindSpeed(currentWeather.current.windSpeed)} 
-                    {currentWeather.current.windDirection ? ` (${currentWeather.current.windDirection}°)` : ''}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Pressure:</span>
-                  <span className="font-medium">{formatPressure(currentWeather.current.pressure)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Visibility:</span>
-                  <span className="font-medium">{formatVisibility(currentWeather.current.visibility)}</span>
-                </div>
-                {currentWeather.current.uvIndex !== undefined && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">UV Index:</span>
-                    <span className="font-medium">{currentWeather.current.uvIndex}</span>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Cloud Cover:</span>
-                  <span className="font-medium">{currentWeather.current.cloudCover}%</span>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="weather-display">
+      {/* Header with location and service info */}
+      <div className="weather-header">
+        <h2>{location.city}, {location.state}</h2>
+        <div className="weather-meta">
+          <span className="weather-service">via {service}</span>
+          {cached && <span className="weather-cached">cached</span>}
+          <span className="weather-timestamp">{formatTimeAgo(timestamp)}</span>
+        </div>
+      </div>
 
-          {/* Data Source and Cache Info */}
-          <div className="flex justify-between items-center text-sm text-gray-500">
-            <div>
-              <span className="font-medium">Data Source:</span> {currentWeather.service}
-            </div>
-            <div className="flex items-center gap-4">
-              {currentWeather.cached && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                  Cached
-                </span>
-              )}
-              <span>
-                Updated: {formatTimeAgo(currentWeather.timestamp)}
-              </span>
-            </div>
+      {/* Current conditions */}
+      <div className="weather-current">
+        <div className="weather-main">
+          <span className="weather-temp">{formatTemperature(current.temperature)}</span>
+          <span className="weather-feels-like">
+            Feels like {formatTemperature(current.feelsLike)}
+          </span>
+        </div>
+        
+        <div className="weather-description">
+          <p>{current.description}</p>
+        </div>
+
+        <div className="weather-details">
+          <div className="weather-detail">
+            <span className="label">Humidity</span>
+            <span className="value">{current.humidity}%</span>
+          </div>
+          
+          <div className="weather-detail">
+            <span className="label">Wind</span>
+            <span className="value">{formatWindSpeed(current.windSpeed)} {current.windDirection}°</span>
+          </div>
+          
+          <div className="weather-detail">
+            <span className="label">Pressure</span>
+            <span className="value">{formatPressure(current.pressure)}</span>
+          </div>
+          
+          <div className="weather-detail">
+            <span className="label">Visibility</span>
+            <span className="value">{formatVisibility(current.visibility)}</span>
+          </div>
+          
+          <div className="weather-detail">
+            <span className="label">UV Index</span>
+            <span className="value">{current.uvIndex}</span>
+          </div>
+          
+          <div className="weather-detail">
+            <span className="label">Cloud Cover</span>
+            <span className="value">{current.cloudCover}%</span>
           </div>
         </div>
       </div>
+
+      {/* Toggle comparison button */}
+      {onComparisonToggle && (
+        <div className="weather-actions">
+          <button 
+            onClick={onComparisonToggle}
+            className="comparison-toggle"
+          >
+            {showComparison ? 'Hide Comparison' : 'Show Comparison'}
+          </button>
+        </div>
+      )}
+
+      {/* Forecast and hourly data would go here */}
+      {forecast && forecast.length > 0 && (
+        <div className="weather-forecast">
+          <h3>Forecast</h3>
+          {/* Forecast implementation */}
+        </div>
+      )}
+
+      {hourly && hourly.length > 0 && (
+        <div className="weather-hourly">
+          <h3>Hourly</h3>
+          {/* Hourly implementation */}
+        </div>
+      )}
     </div>
   );
-});
-
-WeatherDisplay.displayName = 'WeatherDisplay';
+};
 
 export default WeatherDisplay;
